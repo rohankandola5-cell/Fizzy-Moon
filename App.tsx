@@ -11,7 +11,6 @@ import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
 import CustomCursor from './components/CustomCursor';
 import ArtistCard from './components/ArtistCard'; // Keeping component name, but logic is FeatureCard
-import AIChat from './components/AIChat';
 import Bubbles from './components/Bubbles';
 import { FeatureItem } from './types';
 
@@ -129,7 +128,6 @@ const App: React.FC = () => {
     <div className="relative min-h-screen text-white selection:bg-[#f59e0b] selection:text-black cursor-auto md:cursor-none overflow-x-hidden font-sans">
       <CustomCursor />
       <FluidBackground />
-      <AIChat />
       
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-center px-6 md:px-8 py-6 pointer-events-none">
