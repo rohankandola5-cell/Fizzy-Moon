@@ -53,13 +53,13 @@ const StarField = () => {
 
 const FluidBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-br from-[#1a1a1a] via-[#2a1b2a] to-[#1a1a1a]">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-black">
       
       <StarField />
 
-      {/* Blob 1: Hot Pink (Fizzy) */}
+      {/* Blob 1: Vibrant Orange (Fizzy) */}
       <motion.div
-        className="absolute top-[-10%] left-[-10%] w-[90vw] h-[90vw] bg-pink-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
+        className="absolute top-[-10%] left-[-10%] w-[90vw] h-[90vw] bg-orange-600 rounded-full mix-blend-screen filter blur-[60px] opacity-15 will-change-transform"
         animate={{
           x: [0, 50, -25, 0],
           y: [0, -25, 25, 0],
@@ -72,9 +72,9 @@ const FluidBackground: React.FC = () => {
         style={{ transform: 'translateZ(0)' }}
       />
 
-      {/* Blob 2: Amber/Gold (Beer) */}
+      {/* Blob 2: Deep Amber (Beer) */}
       <motion.div
-        className="absolute top-[20%] right-[-20%] w-[100vw] h-[80vw] bg-amber-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
+        className="absolute top-[20%] right-[-20%] w-[100vw] h-[80vw] bg-amber-700 rounded-full mix-blend-screen filter blur-[60px] opacity-15 will-change-transform"
         animate={{
           x: [0, -50, 25, 0],
           y: [0, 50, -25, 0],
@@ -87,9 +87,9 @@ const FluidBackground: React.FC = () => {
         style={{ transform: 'translateZ(0)' }}
       />
 
-      {/* Blob 3: Cyan/Blue (Moon) */}
+      {/* Blob 3: Dark Red/Orange (Moon) */}
       <motion.div
-        className="absolute bottom-[-20%] left-[20%] w-[80vw] h-[80vw] bg-cyan-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
+        className="absolute bottom-[-20%] left-[20%] w-[80vw] h-[80vw] bg-red-900 rounded-full mix-blend-screen filter blur-[60px] opacity-20 will-change-transform"
         animate={{
           x: [0, 75, -75, 0],
           y: [0, -50, 50, 0],
@@ -105,8 +105,8 @@ const FluidBackground: React.FC = () => {
       {/* Static Grain Overlay */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
       
-      {/* Vignette */}
-      <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/10 to-black/60 pointer-events-none" />
+      {/* Heavy Vignette for "Dark Mode" feel */}
+      <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/90 pointer-events-none" />
     </div>
   );
 };

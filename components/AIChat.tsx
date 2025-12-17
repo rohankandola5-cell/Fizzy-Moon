@@ -58,12 +58,12 @@ const AIChat: React.FC = () => {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="mb-4 w-[90vw] md:w-96 bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-fuchsia-500/20"
+            className="mb-4 w-[90vw] md:w-96 bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-orange-500/20"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-fuchsia-900/50 to-purple-900/50 p-4 flex justify-between items-center border-b border-white/10">
+            <div className="bg-gradient-to-r from-orange-900/50 to-amber-900/50 p-4 flex justify-between items-center border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-fuchsia-400 animate-pulse" />
+                <Sparkles className="w-5 h-5 text-orange-400 animate-pulse" />
                 <h3 className="font-heading font-bold text-white tracking-wider">LUMI AI</h3>
               </div>
               <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-white" data-hover="true">
@@ -84,7 +84,7 @@ const AIChat: React.FC = () => {
                   <div
                     className={`max-w-[85%] p-3 rounded-lg text-sm ${
                       msg.role === 'user'
-                        ? 'bg-fuchsia-600 text-white rounded-tr-none'
+                        ? 'bg-orange-600 text-white rounded-tr-none'
                         : 'bg-white/10 text-gray-200 rounded-tl-none border border-white/5'
                     }`}
                   >
@@ -95,9 +95,9 @@ const AIChat: React.FC = () => {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="bg-white/10 p-3 rounded-lg rounded-tl-none flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
@@ -122,7 +122,7 @@ const AIChat: React.FC = () => {
                 <button
                   onClick={handleSend}
                   disabled={isLoading || !input.trim()}
-                  className="bg-fuchsia-600 p-2 rounded-lg hover:bg-fuchsia-500 transition-colors disabled:opacity-50"
+                  className="bg-orange-600 p-2 rounded-lg hover:bg-orange-500 transition-colors disabled:opacity-50"
                   data-hover="true"
                 >
                   <Send className="w-4 h-4 text-white" />
@@ -138,7 +138,7 @@ const AIChat: React.FC = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-fuchsia-600 to-cyan-600 flex items-center justify-center shadow-lg shadow-fuchsia-500/40 border border-white/20 z-50 group"
+        className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-orange-600 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/40 border border-white/20 z-50 group"
         data-hover="true"
       >
         {isOpen ? (

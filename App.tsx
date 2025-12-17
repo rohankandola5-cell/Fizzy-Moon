@@ -212,7 +212,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen text-white selection:bg-amber-500 selection:text-black cursor-auto md:cursor-none overflow-x-hidden font-sans">
+    <div className="relative min-h-screen text-white selection:bg-orange-500 selection:text-black cursor-auto md:cursor-none overflow-x-hidden font-sans">
       <CustomCursor />
       <AIChat />
       <AudioPlayer />
@@ -246,7 +246,7 @@ const App: React.FC = () => {
         {/* Desktop Book Now Button */}
         <button
           onClick={() => scrollToSection('bookings')}
-          className="hidden md:flex absolute right-6 md:right-8 pointer-events-auto items-center gap-2 bg-amber-500 text-black px-6 py-3 rounded-full font-bold font-heading text-xs tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.4)] z-50 border border-amber-500"
+          className="hidden md:flex absolute right-6 md:right-8 pointer-events-auto items-center gap-2 bg-orange-500 text-black px-6 py-3 rounded-full font-bold font-heading text-xs tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.4)] z-50 border border-orange-500"
           data-hover="true"
         >
            <Calendar className="w-4 h-4" />
@@ -275,7 +275,7 @@ const App: React.FC = () => {
               <button
                 key={item}
                 onClick={() => scrollToSection(getSectionId(item))}
-                className="text-3xl font-heading font-bold text-white hover:text-amber-500 transition-colors uppercase bg-transparent border-none text-center px-4"
+                className="text-3xl font-heading font-bold text-white hover:text-orange-500 transition-colors uppercase bg-transparent border-none text-center px-4"
               >
                 {item}
               </button>
@@ -296,10 +296,10 @@ const App: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="flex items-center gap-3 md:gap-6 text-xs md:text-base font-mono text-amber-500 tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 bg-black/40 px-6 py-2 rounded-full backdrop-blur-md border border-white/10"
+            className="flex items-center gap-3 md:gap-6 text-xs md:text-base font-mono text-orange-500 tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 bg-black/40 px-6 py-2 rounded-full backdrop-blur-md border border-white/10"
           >
             <span>Leamington Spa</span>
-            <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-pink-500 rounded-full animate-pulse"/>
+            <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-500 rounded-full animate-pulse"/>
             <span>Open Daily</span>
           </motion.div>
 
@@ -315,9 +315,9 @@ const App: React.FC = () => {
               as="h1" 
               className="text-[15vw] md:text-[14vw] leading-[0.8] font-black tracking-tighter text-center" 
             />
-            {/* Optimized Orb - Moon like */}
+            {/* Optimized Orb - Moon like - Warm Orange Glow */}
             <motion.div 
-               className="absolute -z-20 w-[60vw] h-[60vw] bg-white/5 blur-[60px] rounded-full pointer-events-none will-change-transform"
+               className="absolute -z-20 w-[60vw] h-[60vw] bg-orange-600/10 blur-[60px] rounded-full pointer-events-none will-change-transform"
                animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.2, 0.4, 0.2] }}
                transition={{ duration: 8, repeat: Infinity }}
                style={{ transform: 'translateZ(0)' }}
@@ -328,7 +328,7 @@ const App: React.FC = () => {
              initial={{ scaleX: 0 }}
              animate={{ scaleX: 1 }}
              transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-             className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent mt-4 md:mt-8 mb-6 md:mb-8"
+             className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent mt-4 md:mt-8 mb-6 md:mb-8"
           />
 
           <motion.button
@@ -344,7 +344,7 @@ const App: React.FC = () => {
         </motion.div>
 
         {/* MARQUEE */}
-        <div className="absolute bottom-12 md:bottom-16 left-0 w-full py-4 md:py-6 bg-amber-500 text-black z-20 overflow-hidden border-y-4 border-black shadow-[0_0_40px_rgba(245,158,11,0.2)]">
+        <div className="absolute bottom-12 md:bottom-16 left-0 w-full py-4 md:py-6 bg-orange-500 text-black z-20 overflow-hidden border-y-4 border-black shadow-[0_0_40px_rgba(249,115,22,0.2)]">
           <motion.div 
             className="flex w-fit will-change-transform"
             animate={{ x: "-50%" }}
@@ -374,7 +374,7 @@ const App: React.FC = () => {
              </h2>
              <div className="relative -mt-6 md:-mt-16 z-10">
                <p className="text-3xl md:text-5xl font-elegant italic text-white mb-2">Secure your spot</p>
-               <p className="text-amber-500 font-mono uppercase tracking-widest text-sm md:text-base">
+               <p className="text-orange-500 font-mono uppercase tracking-widest text-sm md:text-base">
                  Choose your experience
                </p>
              </div>
@@ -399,7 +399,7 @@ const App: React.FC = () => {
                 subtitle: 'Celebration Central',
                 price: 'Book Now', 
                 color: 'gold', 
-                accent: 'bg-gradient-to-br from-amber-500/20 to-black border-amber-500/60 hover:border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.1)]', 
+                accent: 'bg-gradient-to-br from-orange-500/20 to-black border-orange-500/60 hover:border-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.1)]', 
                 desc: 'The best seat in the house. Located centrally in our heated marquee. Perfect for birthdays and those who want to be seen.',
                 features: [
                   { icon: Crown, text: 'Center of Action' },
@@ -412,7 +412,7 @@ const App: React.FC = () => {
                 subtitle: 'Ultra Exclusive',
                 price: 'Private Hire', 
                 color: 'pink', 
-                accent: 'bg-pink-500/5 border-pink-500/30 hover:border-pink-500', 
+                accent: 'bg-red-500/5 border-red-500/30 hover:border-red-500', 
                 desc: 'Your private sanctuary. Host up to 25 guests in our most exclusive hidden area. Perfect for private parties.',
                 features: [
                   { icon: Users, text: 'Up to 25 Guests' },
@@ -434,9 +434,9 @@ const App: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
                        <h3 className="text-2xl md:text-3xl font-heading font-bold text-white leading-none">{ticket.name}</h3>
-                       {ticket.color === 'gold' && <Crown className="text-amber-500 w-6 h-6 animate-pulse" />}
+                       {ticket.color === 'gold' && <Crown className="text-orange-500 w-6 h-6 animate-pulse" />}
                     </div>
-                    <p className={`text-sm font-bold uppercase tracking-widest mb-6 ${ticket.color === 'gold' ? 'text-amber-500' : ticket.color === 'pink' ? 'text-pink-500' : 'text-cyan-500'}`}>
+                    <p className={`text-sm font-bold uppercase tracking-widest mb-6 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : 'text-cyan-500'}`}>
                       {ticket.subtitle}
                     </p>
                     
@@ -448,7 +448,7 @@ const App: React.FC = () => {
                       {ticket.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center gap-4">
                           <div className={`p-2 rounded-full bg-white/5`}>
-                             <feature.icon className={`w-4 h-4 ${ticket.color === 'gold' ? 'text-amber-500' : ticket.color === 'pink' ? 'text-pink-500' : 'text-cyan-500'}`} /> 
+                             <feature.icon className={`w-4 h-4 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : 'text-cyan-500'}`} /> 
                           </div>
                           {feature.text}
                         </li>
@@ -460,7 +460,7 @@ const App: React.FC = () => {
                     onClick={() => handleBooking(i)}
                     disabled={isDisabled}
                     className={`w-full py-4 text-sm font-bold uppercase tracking-[0.2em] border transition-all duration-300 mt-8 rounded-xl
-                      ${ticket.color === 'gold' ? 'bg-amber-500 text-black border-amber-500 hover:bg-white hover:border-white' : 'border-white/20 text-white hover:bg-white hover:text-black'}
+                      ${ticket.color === 'gold' ? 'bg-orange-500 text-black border-orange-500 hover:bg-white hover:border-white' : 'border-white/20 text-white hover:bg-white hover:text-black'}
                       ${isPurchased ? '!bg-green-500 !text-white !border-green-500' : ''}
                       ${isPurchasing ? 'opacity-70 cursor-wait' : ''}
                     `}
@@ -478,9 +478,9 @@ const App: React.FC = () => {
       <section id="whats-on" className="relative z-10 py-20 md:py-32 bg-[#1a1a1a] border-t border-white/5">
          <div className="max-w-[1600px] mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center mb-16">
-              <span className="text-pink-500 font-mono text-sm tracking-[0.3em] uppercase mb-4">Live & Loud</span>
+              <span className="text-orange-500 font-mono text-sm tracking-[0.3em] uppercase mb-4">Live & Loud</span>
               <h2 className="text-5xl md:text-8xl font-heading font-bold uppercase text-center">
-                What's <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-amber-500">On</span>
+                What's <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">On</span>
               </h2>
             </div>
             
@@ -498,11 +498,11 @@ const App: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end mb-16 px-4">
              <div>
                <div className="flex items-center gap-4 mb-6">
-                  <span className="text-amber-500 font-mono text-sm tracking-[0.3em] uppercase">Taste Makers</span>
-                  <div className="h-px w-12 bg-amber-500/50" />
+                  <span className="text-orange-500 font-mono text-sm tracking-[0.3em] uppercase">Taste Makers</span>
+                  <div className="h-px w-12 bg-orange-500/50" />
                </div>
                <h2 className="text-5xl md:text-7xl font-heading font-bold uppercase leading-none mb-6">
-                 More Than <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-pink-500">A Pub</span>
+                 More Than <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">A Pub</span>
                </h2>
                <p className="text-lg text-gray-300 font-light leading-relaxed max-w-xl mb-8">
                  Fizzy Moon is an extension of your night out. A place where the drinks are crafted in-house, the food is fire-kissed, and the music never stops.
@@ -516,8 +516,8 @@ const App: React.FC = () => {
                     { icon: Music, label: "Live Music" },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 text-white/80 group">
-                      <div className="p-2 rounded-full bg-white/5 group-hover:bg-amber-500 transition-colors duration-300">
-                        <item.icon className="w-4 h-4 text-amber-500 group-hover:text-black transition-colors duration-300" />
+                      <div className="p-2 rounded-full bg-white/5 group-hover:bg-orange-500 transition-colors duration-300">
+                        <item.icon className="w-4 h-4 text-orange-500 group-hover:text-black transition-colors duration-300" />
                       </div>
                       <span className="font-bold uppercase text-xs tracking-widest">{item.label}</span>
                     </div>
@@ -528,7 +528,7 @@ const App: React.FC = () => {
              <div className="flex justify-start lg:justify-end pb-2">
                 <button 
                   onClick={() => scrollToSection('bookings')}
-                  className="group relative px-8 py-4 bg-white/5 border border-white/20 text-white font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-amber-500 hover:border-amber-500 hover:text-black overflow-hidden rounded-full"
+                  className="group relative px-8 py-4 bg-white/5 border border-white/20 text-white font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-orange-500 hover:border-orange-500 hover:text-black overflow-hidden rounded-full"
                   data-hover="true"
                 >
                    <span className="relative z-10 flex items-center gap-2">
@@ -551,7 +551,7 @@ const App: React.FC = () => {
           <div className="max-w-4xl mx-auto px-6">
               <div className="text-center mb-16">
                   <h2 className="text-4xl md:text-6xl font-heading font-bold uppercase mb-4">
-                      Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-pink-500">Questions</span>
+                      Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">Questions</span>
                   </h2>
                   <p className="text-gray-400">Everything you need to know before you go.</p>
               </div>
@@ -594,7 +594,7 @@ const App: React.FC = () => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-6xl bg-[#1a1a1a] border-t md:border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl shadow-amber-500/10 group/modal h-[100dvh] md:h-[85vh] rounded-none md:rounded-2xl"
+              className="relative w-full max-w-6xl bg-[#1a1a1a] border-t md:border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl shadow-orange-500/10 group/modal h-[100dvh] md:h-[85vh] rounded-none md:rounded-2xl"
             >
               <button
                 onClick={() => setSelectedFeature(null)}
@@ -665,7 +665,7 @@ const App: React.FC = () => {
                   transition={{ duration: 0.4, delay: 0.1 }}
                   className="flex flex-col h-full w-full p-4 md:p-12"
                 >
-                  <div className="flex items-center gap-3 text-amber-500 mb-2 md:mb-4 shrink-0">
+                  <div className="flex items-center gap-3 text-orange-500 mb-2 md:mb-4 shrink-0">
                      <Calendar className="w-4 h-4" />
                      <span className="font-mono text-xs md:text-sm tracking-widest uppercase">{selectedFeature.tag}</span>
                   </div>
@@ -674,7 +674,7 @@ const App: React.FC = () => {
                     {selectedFeature.name}
                   </h3>
                   
-                  <p className="text-base md:text-lg text-pink-500 font-medium tracking-widest uppercase mb-6 shrink-0">
+                  <p className="text-base md:text-lg text-amber-500 font-medium tracking-widest uppercase mb-6 shrink-0">
                     {selectedFeature.category}
                   </p>
                   
@@ -688,7 +688,7 @@ const App: React.FC = () => {
                         </p>
                         
                         <h4 className="text-lg md:text-xl font-heading font-bold text-white sticky top-0 bg-[#1a1a1a] py-3 z-20 border-b border-white/10 shadow-xl flex items-center gap-2">
-                          <Music className="w-4 h-4 md:w-5 md:h-5 text-pink-500" />
+                          <Music className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
                           2026 LINEUP
                         </h4>
                         
@@ -696,24 +696,24 @@ const App: React.FC = () => {
                           {MUSIC_SCHEDULE.map((month, idx) => (
                              <div key={idx} className="relative">
                                <div className="sticky top-[3.25rem] z-10 bg-[#1a1a1a] py-2 md:py-3 border-b border-white/5 flex items-center">
-                                 <div className="w-2 h-2 rounded-full bg-amber-500 mr-2"></div>
-                                 <h5 className="text-amber-500 font-mono font-bold uppercase tracking-widest text-xs md:text-sm">
+                                 <div className="w-2 h-2 rounded-full bg-orange-500 mr-2"></div>
+                                 <h5 className="text-orange-500 font-mono font-bold uppercase tracking-widest text-xs md:text-sm">
                                    {month.month}
                                  </h5>
                                </div>
                                <div className="pt-2 pb-4 space-y-2">
                                  {month.events.map((event, i) => (
-                                   <div key={i} className={`flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-lg border ${event.special ? 'bg-amber-500/5 border-amber-500/30' : 'bg-white/5 border-transparent'} hover:bg-white/10 transition-colors group/item`}>
+                                   <div key={i} className={`flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-lg border ${event.special ? 'bg-orange-500/5 border-orange-500/30' : 'bg-white/5 border-transparent'} hover:bg-white/10 transition-colors group/item`}>
                                       <div className="w-16 md:w-20 shrink-0 flex flex-col justify-center border-r border-white/10 pr-3 md:pr-4">
                                         <span className="font-heading font-bold text-white/90 text-xs md:text-sm leading-tight">{event.date.split(' ')[0]}</span>
                                         <span className="font-mono text-xl md:text-2xl font-bold text-white leading-none">{event.date.split(' ')[1]}</span>
                                       </div>
                                       <div className="flex-1">
-                                        <div className={`font-bold uppercase tracking-wide text-base md:text-lg leading-tight ${event.special ? 'text-amber-500' : event.highlight ? 'text-white' : 'text-gray-300 group-hover/item:text-white'}`}>
+                                        <div className={`font-bold uppercase tracking-wide text-base md:text-lg leading-tight ${event.special ? 'text-orange-500' : event.highlight ? 'text-white' : 'text-gray-300 group-hover/item:text-white'}`}>
                                           {event.act}
                                         </div>
                                         {event.note && (
-                                          <div className="text-[10px] md:text-xs text-pink-500 font-bold uppercase mt-1 tracking-wider">{event.note}</div>
+                                          <div className="text-[10px] md:text-xs text-amber-500 font-bold uppercase mt-1 tracking-wider">{event.note}</div>
                                         )}
                                       </div>
                                    </div>

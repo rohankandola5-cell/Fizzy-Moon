@@ -5,11 +5,11 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #1a1a1a;
+    background-color: #050505;
   }
   
   body {
-    background-color: #1a1a1a;
+    background-color: #050505;
     color: #ffffff;
     font-family: 'Space Grotesk', sans-serif;
     overflow-x: hidden;
