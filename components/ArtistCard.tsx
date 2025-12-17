@@ -35,7 +35,7 @@ const ArtistCard: React.FC<FeatureCardProps> = ({ artist, onClick }) => {
             rest: { scale: 1, opacity: 0.6, filter: 'grayscale(100%)' },
             hover: { scale: 1.05, opacity: 0.9, filter: 'grayscale(0%)' }
           }}
-          transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
+          transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1] }}
         />
         <div className="absolute inset-0 bg-black/30 group-hover:bg-[#ec4899]/20 transition-colors duration-500" />
       </div>
