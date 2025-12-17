@@ -19,7 +19,7 @@ const GradientText: React.FC<GradientTextProps> = ({ text, as: Component = 'span
     <Component className={`relative inline-block font-black tracking-tighter isolate ${className}`}>
       {/* Main Gradient Text */}
       <motion.span
-        className="absolute inset-0 z-10 block bg-gradient-to-r from-white via-[#ec4899] via-[#f59e0b] via-[#06b6d4] to-white bg-[length:200%_auto] bg-clip-text text-transparent will-change-[background-position]"
+        className="absolute inset-0 z-10 block bg-gradient-to-r from-white via-pink-500 via-amber-500 via-cyan-500 to-white bg-[length:200%_auto] bg-clip-text text-transparent will-change-[background-position]"
         animate={{
           backgroundPosition: ['0% center', '200% center'],
         }}
@@ -52,7 +52,7 @@ const GradientText: React.FC<GradientTextProps> = ({ text, as: Component = 'span
       
       {/* Blur Glow Effect */}
       <span
-        className="absolute inset-0 -z-10 block bg-gradient-to-r from-[#ec4899] via-[#f59e0b] via-[#06b6d4] to-[#ec4899] bg-[length:200%_auto] bg-clip-text text-transparent blur-xl md:blur-2xl opacity-40"
+        className="absolute inset-0 -z-10 block bg-gradient-to-r from-pink-500 via-amber-500 via-cyan-500 to-pink-500 bg-[length:200%_auto] bg-clip-text text-transparent blur-xl md:blur-2xl opacity-40"
         style={{ 
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',

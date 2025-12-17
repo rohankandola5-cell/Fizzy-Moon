@@ -59,7 +59,7 @@ const FluidBackground: React.FC = () => {
 
       {/* Blob 1: Hot Pink (Fizzy) */}
       <motion.div
-        className="absolute top-[-10%] left-[-10%] w-[90vw] h-[90vw] bg-[#ec4899] rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
+        className="absolute top-[-10%] left-[-10%] w-[90vw] h-[90vw] bg-pink-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
         animate={{
           x: [0, 50, -25, 0],
           y: [0, -25, 25, 0],
@@ -74,7 +74,7 @@ const FluidBackground: React.FC = () => {
 
       {/* Blob 2: Amber/Gold (Beer) */}
       <motion.div
-        className="absolute top-[20%] right-[-20%] w-[100vw] h-[80vw] bg-[#f59e0b] rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
+        className="absolute top-[20%] right-[-20%] w-[100vw] h-[80vw] bg-amber-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
         animate={{
           x: [0, -50, 25, 0],
           y: [0, 50, -25, 0],
@@ -89,7 +89,7 @@ const FluidBackground: React.FC = () => {
 
       {/* Blob 3: Cyan/Blue (Moon) */}
       <motion.div
-        className="absolute bottom-[-20%] left-[20%] w-[80vw] h-[80vw] bg-[#06b6d4] rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
+        className="absolute bottom-[-20%] left-[20%] w-[80vw] h-[80vw] bg-cyan-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 will-change-transform"
         animate={{
           x: [0, 75, -75, 0],
           y: [0, -50, 50, 0],
