@@ -6,7 +6,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Ticket, Globe, Zap, Music, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Utensils, Beer, PartyPopper, Trophy, Users, Crown, Wine, Armchair, Briefcase, Star, Flame, ArrowUpRight, Mic2 } from 'lucide-react';
+import { Ticket, Globe, Zap, Music, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Utensils, Beer, PartyPopper, Trophy, Users, Crown, Wine, Armchair, Briefcase, Star, Flame, ArrowUpRight, Mic2, Clock } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
 import CustomCursor from './components/CustomCursor';
@@ -15,64 +15,86 @@ import Bubbles from './components/Bubbles';
 import AIChat from './components/AIChat';
 import FAQAccordion from './components/FAQAccordion';
 import { FeatureItem } from './types';
-import AudioPlayer from './components/AudioPlayer';
+
+const BOOKING_URL = "https://www.sevenrooms.com/explore/fizzymoonbrewhouse/reservations/create/search/";
+
+// BAND IMAGES PLACEHOLDERS
+const BAND_IMAGES = {
+  jackPrice: "https://images.unsplash.com/photo-1516280440614-6697288d5d38?auto=format&fit=crop&w=300&q=80",
+  innerCity: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=300&q=80",
+  kingKandola: "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?auto=format&fit=crop&w=300&q=80",
+  tovey: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=80",
+  tiago: "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=300&q=80",
+  mockingJays: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=300&q=80",
+  djRoss: "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?auto=format&fit=crop&w=300&q=80",
+  carl: "https://images.unsplash.com/photo-1514525253440-b393452e8d26?auto=format&fit=crop&w=300&q=80",
+  coverBuoys: "https://images.unsplash.com/photo-1459749411177-d4a414c9ff5f?auto=format&fit=crop&w=300&q=80",
+  quest: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=300&q=80",
+  backCat: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=300&q=80",
+  chasingDeer: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=300&q=80",
+  cole: "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=300&q=80",
+  viva: "https://images.unsplash.com/photo-1604093882750-3ed498f3178b?auto=format&fit=crop&w=300&q=80",
+  izzy: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=300&q=80",
+  thom: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=300&q=80",
+  andy: "https://images.unsplash.com/photo-1525994886773-080587e161c2?auto=format&fit=crop&w=300&q=80",
+};
 
 // MUSIC SCHEDULE DATA 2026
 const MUSIC_SCHEDULE = [
   {
     month: 'January',
     events: [
-      { date: 'Fri 2nd', act: 'Jack Price' },
-      { date: 'Sat 3rd', act: 'Inner City 3', highlight: true },
-      { date: 'Fri 9th', act: 'King Kandola', highlight: true },
-      { date: 'Sat 10th', act: 'Tovey Brothers', highlight: true },
-      { date: 'Fri 16th', act: 'Jack Price' },
-      { date: 'Sat 17th', act: "Tiago & The Amigo's", highlight: true },
-      { date: 'Fri 23rd', act: 'Jack Price' },
-      { date: 'Sat 24th', act: "The MockingJay's", highlight: true },
-      { date: 'Fri 30th', act: 'DJ ROSS', special: true },
-      { date: 'Sat 31st', act: 'CARL SINCLAIR', special: true },
+      { date: 'Fri 2nd', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 3rd', act: 'Inner City 3', highlight: true, image: BAND_IMAGES.innerCity },
+      { date: 'Fri 9th', act: 'King Kandola', highlight: true, image: BAND_IMAGES.kingKandola },
+      { date: 'Sat 10th', act: 'Tovey Brothers', highlight: true, image: BAND_IMAGES.tovey },
+      { date: 'Fri 16th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 17th', act: "Tiago & The Amigo's", highlight: true, image: BAND_IMAGES.tiago },
+      { date: 'Fri 23rd', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 24th', act: "The MockingJay's", highlight: true, image: BAND_IMAGES.mockingJays },
+      { date: 'Fri 30th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
+      { date: 'Sat 31st', act: 'CARL SINCLAIR', special: true, image: BAND_IMAGES.carl },
     ]
   },
   {
     month: 'February',
     events: [
-      { date: 'Fri 6th', act: 'Jack Price' },
-      { date: 'Sat 7th', act: 'Cover Buoys', highlight: true },
-      { date: 'Fri 13th', act: 'King Kandola', highlight: true },
-      { date: 'Sat 14th', act: 'QUEST TRIO', special: true },
-      { date: 'Fri 20th', act: 'DJ ROSS', special: true },
-      { date: 'Sat 21st', act: 'Back Catalogue', highlight: true },
-      { date: 'Fri 27th', act: 'Jack Price' },
-      { date: 'Sat 28th', act: 'CARL SINCLAIR', special: true },
+      { date: 'Fri 6th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 7th', act: 'Cover Buoys', highlight: true, image: BAND_IMAGES.coverBuoys },
+      { date: 'Fri 13th', act: 'King Kandola', highlight: true, image: BAND_IMAGES.kingKandola },
+      { date: 'Sat 14th', act: 'QUEST TRIO', special: true, image: BAND_IMAGES.quest },
+      { date: 'Fri 20th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
+      { date: 'Sat 21st', act: 'Back Catalogue', highlight: true, image: BAND_IMAGES.backCat },
+      { date: 'Fri 27th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 28th', act: 'CARL SINCLAIR', special: true, image: BAND_IMAGES.carl },
     ]
   },
   {
     month: 'March',
     events: [
-      { date: 'Fri 6th', act: 'Jack Price' },
-      { date: 'Sat 7th', act: 'Chasing Deer', highlight: true },
-      { date: 'Fri 13th', act: 'King Kandola', highlight: true },
-      { date: 'Sat 14th', act: "Tiago & The Amigo's", highlight: true },
-      { date: 'Sun 15th', act: 'COLE (2/3pm)', note: 'MOTHERS DAY !!!', special: true },
-      { date: 'Fri 20th', act: 'DJ ROSS', special: true },
-      { date: 'Sat 21st', act: 'Viva La Diva (Josie)', highlight: true },
-      { date: 'Fri 27th', act: 'Jack Price' },
-      { date: 'Sat 28th', act: 'Back Catalogue', highlight: true },
+      { date: 'Fri 6th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 7th', act: 'Chasing Deer', highlight: true, image: BAND_IMAGES.chasingDeer },
+      { date: 'Fri 13th', act: 'King Kandola', highlight: true, image: BAND_IMAGES.kingKandola },
+      { date: 'Sat 14th', act: "Tiago & The Amigo's", highlight: true, image: BAND_IMAGES.tiago },
+      { date: 'Sun 15th', act: 'COLE (2/3pm)', note: 'MOTHERS DAY !!!', special: true, image: BAND_IMAGES.cole },
+      { date: 'Fri 20th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
+      { date: 'Sat 21st', act: 'Viva La Diva (Josie)', highlight: true, image: BAND_IMAGES.viva },
+      { date: 'Fri 27th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 28th', act: 'Back Catalogue', highlight: true, image: BAND_IMAGES.backCat },
     ]
   },
   {
     month: 'April',
     events: [
-      { date: 'Fri 3rd', act: 'Jack Price', note: 'GOOD FRIDAY', special: true },
-      { date: 'Sat 4th', act: 'IZZY OWEN TRIO', special: true },
-      { date: 'Sun 5th', act: 'Thom Kirkpatrick', note: 'EASTER SUNDAY', special: true },
-      { date: 'Fri 10th', act: 'King Kandola', special: true },
-      { date: 'Sat 11th', act: 'Andy Flynn Trio', highlight: true },
-      { date: 'Fri 17th', act: 'DJ ROSS', special: true },
-      { date: 'Sat 18th', act: 'CARL SINCLAIR', special: true },
-      { date: 'Fri 24th', act: 'Jack Price' },
-      { date: 'Sat 25th', act: 'Cover Buoys', highlight: true },
+      { date: 'Fri 3rd', act: 'Jack Price', note: 'GOOD FRIDAY', special: true, image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 4th', act: 'IZZY OWEN TRIO', special: true, image: BAND_IMAGES.izzy },
+      { date: 'Sun 5th', act: 'Thom Kirkpatrick', note: 'EASTER SUNDAY', special: true, image: BAND_IMAGES.thom },
+      { date: 'Fri 10th', act: 'King Kandola', special: true, image: BAND_IMAGES.kingKandola },
+      { date: 'Sat 11th', act: 'Andy Flynn Trio', highlight: true, image: BAND_IMAGES.andy },
+      { date: 'Fri 17th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
+      { date: 'Sat 18th', act: 'CARL SINCLAIR', special: true, image: BAND_IMAGES.carl },
+      { date: 'Fri 24th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
+      { date: 'Sat 25th', act: 'Cover Buoys', highlight: true, image: BAND_IMAGES.coverBuoys },
     ]
   }
 ];
@@ -81,7 +103,7 @@ const MUSIC_SCHEDULE = [
 const EVENTS: FeatureItem[] = [
   { 
     id: 'e1', 
-    name: 'Live Music Weekends', 
+    name: 'Live Music Calendar', 
     category: '2026 Lineup', 
     tag: 'MUSIC', 
     image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1000&auto=format&fit=crop',
@@ -139,19 +161,21 @@ const App: React.FC = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   
-  // Parallax setup for Experience Section
-  const experienceRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: experienceScrollProgress } = useScroll({
-    target: experienceRef,
-    offset: ["start end", "end start"]
-  });
-  const experienceParallax = useTransform(experienceScrollProgress, [0, 1], ["-10%", "10%"]);
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState<FeatureItem | null>(null);
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+  const [activeMonth, setActiveMonth] = useState(0);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   
-  const [bookingIndex, setBookingIndex] = useState<number | null>(null);
-  const [bookedIndex, setBookedIndex] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Handle keyboard navigation for modal
   useEffect(() => {
@@ -165,12 +189,8 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedFeature]);
 
-  const handleBooking = (index: number) => {
-    setBookingIndex(index);
-    setTimeout(() => {
-      setBookingIndex(null);
-      setBookedIndex(index);
-    }, 2000);
+  const handleBooking = () => {
+    window.open(BOOKING_URL, "_blank");
   };
 
   const scrollToSection = (id: string) => {
@@ -185,6 +205,44 @@ const App: React.FC = () => {
         top: offsetPosition,
         behavior: 'smooth'
       });
+    }
+  };
+
+  const scrollToMonth = (index: number) => {
+    if (modalScrollRef.current) {
+      setIsAutoScrolling(true);
+      const element = document.getElementById(`month-section-${index}`);
+      if (element) {
+        const headerOffset = 90; 
+        const top = element.offsetTop - headerOffset;
+        modalScrollRef.current.scrollTo({
+          top: Math.max(0, top),
+          behavior: 'smooth'
+        });
+        setActiveMonth(index);
+        
+        setTimeout(() => {
+           setIsAutoScrolling(false);
+        }, 800);
+      }
+    }
+  };
+
+  const handleModalScroll = () => {
+    if (isAutoScrolling) return;
+
+    if (modalScrollRef.current) {
+       const sections = MUSIC_SCHEDULE.map((_, i) => document.getElementById(`month-section-${i}`));
+       const scrollPosition = modalScrollRef.current.scrollTop;
+       const triggerPoint = scrollPosition + 120;
+  
+       let currentIndex = 0;
+       sections.forEach((section, index) => {
+          if (section && section.offsetTop <= triggerPoint) {
+             currentIndex = index;
+          }
+       });
+       setActiveMonth(currentIndex);
     }
   };
 
@@ -215,61 +273,90 @@ const App: React.FC = () => {
     <div className="relative min-h-screen text-white selection:bg-orange-500 selection:text-black cursor-auto md:cursor-none overflow-x-hidden font-sans">
       <CustomCursor />
       <AIChat />
-      <AudioPlayer />
       <FluidBackground />
       
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-center px-6 md:px-8 py-6 pointer-events-none">
-        <div className="absolute left-6 md:left-8 z-50 pointer-events-auto">
-          <img 
-            src="https://static.wixstatic.com/media/b6f2c5_80f0668f46994301aa5a8bbf075ccbca~mv2.png/v1/fill/w_232,h_306,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/FIZZY%20MOON%20WHITE.png" 
-            alt="Fizzy Moon" 
-            className="h-12 md:h-16 w-auto object-contain cursor-pointer"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          />
-        </div>
-        
-        {/* Desktop Menu */}
-        <div className="hidden md:flex pointer-events-auto bg-black/30 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] gap-1 z-50 transform translate-y-2 ring-1 ring-white/5">
-          {navItems.map((item) => (
-            <button 
-              key={item} 
-              onClick={() => scrollToSection(getSectionId(item))}
-              className="px-6 py-2.5 rounded-full text-white/90 font-medium text-xs font-heading uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all duration-300 border border-transparent hover:border-white/10 active:scale-95 relative overflow-hidden group"
+      {/* Navigation - Z-50 (Highest) */}
+      <nav 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled 
+            ? 'py-4 bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-lg pointer-events-auto' 
+            : 'py-6 pointer-events-none'
+        }`}
+      >
+        <div className="flex items-center justify-between px-6 md:px-8 max-w-[1920px] mx-auto w-full">
+          {/* Logo */}
+          <div className="pointer-events-auto z-50">
+            <img 
+              src="https://static.wixstatic.com/media/b6f2c5_80f0668f46994301aa5a8bbf075ccbca~mv2.png/v1/fill/w_232,h_306,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/FIZZY%20MOON%20WHITE.png" 
+              alt="Fizzy Moon" 
+              className={`w-auto object-contain cursor-pointer transition-all duration-300 ${scrolled ? 'h-10 md:h-12' : 'h-12 md:h-16'}`}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            />
+          </div>
+          
+          {/* Desktop Menu - Centered */}
+          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto bg-black/30 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] gap-1 z-50 ring-1 ring-white/5">
+            {navItems.map((item) => (
+              <button 
+                key={item} 
+                onClick={() => scrollToSection(getSectionId(item))}
+                className="px-6 py-2.5 rounded-full text-white/90 font-medium text-xs font-heading uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all duration-300 border border-transparent hover:border-white/10 active:scale-95 relative overflow-hidden group"
+                data-hover="true"
+              >
+                <span className="relative z-10">{item}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-3 z-50 pointer-events-auto">
+            {/* Desktop Book Now */}
+            <button
+              onClick={handleBooking}
+              className="hidden md:flex items-center gap-2 bg-orange-500 text-black px-6 py-3 rounded-full font-bold font-heading text-xs tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.4)] border border-orange-500"
               data-hover="true"
             >
-              <span className="relative z-10">{item}</span>
+              <Calendar className="w-4 h-4" />
+              <span>BOOK NOW</span>
             </button>
-          ))}
+
+            {/* Mobile Book Button */}
+            <button
+              onClick={handleBooking}
+              className="md:hidden flex items-center gap-2 bg-orange-500 text-black px-4 py-2.5 rounded-full font-bold font-heading text-[10px] tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.4)] border border-orange-500"
+              data-hover="true"
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>BOOK</span>
+            </button>
+
+            {/* Mobile Menu Toggle - Enhanced Interaction */}
+            <button 
+              className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border transition-all duration-300 shadow-lg cursor-pointer ${scrolled ? 'bg-white/10 border-white/20' : 'bg-white/10 backdrop-blur-md border-white/20'} pointer-events-auto active:scale-90`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setMobileMenuOpen(prev => !prev);
+              }}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5 pointer-events-none" />
+              ) : (
+                <Menu className="w-5 h-5 pointer-events-none" />
+              )}
+            </button>
+          </div>
         </div>
-
-        {/* Desktop Book Now Button */}
-        <button
-          onClick={() => scrollToSection('bookings')}
-          className="hidden md:flex absolute right-6 md:right-8 pointer-events-auto items-center gap-2 bg-orange-500 text-black px-6 py-3 rounded-full font-bold font-heading text-xs tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.4)] z-50 border border-orange-500"
-          data-hover="true"
-        >
-           <Calendar className="w-4 h-4" />
-           <span>BOOK NOW</span>
-        </button>
-
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="absolute right-6 md:hidden text-white z-50 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border border-white/20 pointer-events-auto shadow-lg"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-           {mobileMenuOpen ? <X /> : <Menu />}
-        </button>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay - Z-40 (Under Nav, Over Content) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-30 bg-[#1a1a1a]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed inset-0 top-0 z-40 bg-[#1a1a1a]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden h-screen w-screen"
           >
             {navItems.map((item) => (
               <button
@@ -291,7 +378,6 @@ const App: React.FC = () => {
           style={{ y, opacity }}
           className="z-10 text-center flex flex-col items-center w-full max-w-6xl pb-24 md:pb-20"
         >
-           {/* Date / Location */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -303,7 +389,6 @@ const App: React.FC = () => {
             <span>Open Daily</span>
           </motion.div>
 
-          {/* Main Title */}
           <div className="relative w-full flex justify-center items-center flex-col">
             <GradientText 
               text="FIZZY" 
@@ -315,7 +400,6 @@ const App: React.FC = () => {
               as="h1" 
               className="text-[15vw] md:text-[14vw] leading-[0.8] font-black tracking-tighter text-center" 
             />
-            {/* Optimized Orb - Moon like - Warm Orange Glow */}
             <motion.div 
                className="absolute -z-20 w-[60vw] h-[60vw] bg-orange-600/10 blur-[60px] rounded-full pointer-events-none will-change-transform"
                animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.2, 0.4, 0.2] }}
@@ -365,7 +449,7 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* BOOKINGS SECTION (Moved to Top) */}
+      {/* BOOKINGS SECTION */}
       <section id="bookings" className="relative z-10 py-20 md:py-32 px-4 md:px-6 bg-gradient-to-b from-[#111] to-[#1a1a1a] border-t border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 md:mb-20">
@@ -380,18 +464,31 @@ const App: React.FC = () => {
              </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8">
             {[
               { 
                 name: 'Standard Booking', 
                 subtitle: 'Main Bar & Garden',
-                price: 'Free', 
+                price: 'Book Free', 
                 color: 'cyan', 
                 accent: 'bg-cyan-500/5 border-cyan-500/30 hover:border-cyan-500', 
                 desc: 'Soak up the vibe in our main bar or heated garden marquee. Casual, lively, and perfect for getting together.',
                 features: [
                   { icon: Users, text: 'Groups of 2 - Large Parties' },
                   { icon: Utensils, text: 'Full Menu Available' },
+                ]
+              },
+              {
+                name: 'Group Buffet',
+                subtitle: 'Large Group Sharing',
+                price: 'From £25pp',
+                color: 'purple',
+                accent: 'bg-purple-500/5 border-purple-500/30 hover:border-purple-500',
+                desc: 'Designed for groups of 15+. A curated selection of dishes placed on tables for your group to enjoy. Pre-order required.',
+                features: [
+                  { icon: Users, text: 'Groups 15+' },
+                  { icon: Utensils, text: 'Buffet Platter Service' },
+                  { icon: Clock, text: 'Pre-order Required' }
                 ]
               },
               { 
@@ -421,22 +518,18 @@ const App: React.FC = () => {
                 ]
               },
             ].map((ticket, i) => {
-              const isPurchasing = bookingIndex === i;
-              const isPurchased = bookedIndex === i;
-              const isDisabled = (bookingIndex !== null) || (bookedIndex !== null);
-
               return (
                 <motion.div
                   key={i}
-                  whileHover={isDisabled ? {} : { y: -15 }}
-                  className={`relative p-8 md:p-10 border backdrop-blur-md flex flex-col min-h-[500px] transition-all duration-300 ${ticket.accent} ${isDisabled && !isPurchased ? 'opacity-50 grayscale' : ''} rounded-2xl group`}
+                  whileHover={{ y: -15 }}
+                  className={`relative p-8 md:p-10 border backdrop-blur-md flex flex-col min-h-[500px] transition-all duration-300 ${ticket.accent} rounded-2xl group`}
                 >
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
                        <h3 className="text-2xl md:text-3xl font-heading font-bold text-white leading-none">{ticket.name}</h3>
                        {ticket.color === 'gold' && <Crown className="text-orange-500 w-6 h-6 animate-pulse" />}
                     </div>
-                    <p className={`text-sm font-bold uppercase tracking-widest mb-6 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : 'text-cyan-500'}`}>
+                    <p className={`text-sm font-bold uppercase tracking-widest mb-6 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : ticket.color === 'purple' ? 'text-purple-500' : 'text-cyan-500'}`}>
                       {ticket.subtitle}
                     </p>
                     
@@ -448,7 +541,7 @@ const App: React.FC = () => {
                       {ticket.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center gap-4">
                           <div className={`p-2 rounded-full bg-white/5`}>
-                             <feature.icon className={`w-4 h-4 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : 'text-cyan-500'}`} /> 
+                             <feature.icon className={`w-4 h-4 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : ticket.color === 'purple' ? 'text-purple-500' : 'text-cyan-500'}`} /> 
                           </div>
                           {feature.text}
                         </li>
@@ -457,15 +550,12 @@ const App: React.FC = () => {
                   </div>
                   
                   <button 
-                    onClick={() => handleBooking(i)}
-                    disabled={isDisabled}
+                    onClick={handleBooking}
                     className={`w-full py-4 text-sm font-bold uppercase tracking-[0.2em] border transition-all duration-300 mt-8 rounded-xl
                       ${ticket.color === 'gold' ? 'bg-orange-500 text-black border-orange-500 hover:bg-white hover:border-white' : 'border-white/20 text-white hover:bg-white hover:text-black'}
-                      ${isPurchased ? '!bg-green-500 !text-white !border-green-500' : ''}
-                      ${isPurchasing ? 'opacity-70 cursor-wait' : ''}
                     `}
                   >
-                    {isPurchasing ? 'Processing...' : isPurchased ? 'Confirmed' : ticket.price}
+                    {ticket.price}
                   </button>
                 </motion.div>
               );
@@ -474,7 +564,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* WHAT'S ON SECTION (Events) */}
+      {/* WHAT'S ON SECTION */}
       <section id="whats-on" className="relative z-10 py-20 md:py-32 bg-[#1a1a1a] border-t border-white/5">
          <div className="max-w-[1600px] mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center mb-16">
@@ -492,7 +582,7 @@ const App: React.FC = () => {
          </div>
       </section>
 
-      {/* MERGED SECTION: MORE THAN A PUB + TASTE MAKERS */}
+      {/* MERGED SECTION */}
       <section id="eat-drink" className="relative z-10 py-24 md:py-32 bg-[#111] border-t border-white/10">
         <div className="max-w-[1600px] mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end mb-16 px-4">
@@ -507,8 +597,6 @@ const App: React.FC = () => {
                <p className="text-lg text-gray-300 font-light leading-relaxed max-w-xl mb-8">
                  Fizzy Moon is an extension of your night out. A place where the drinks are crafted in-house, the food is fire-kissed, and the music never stops.
                </p>
-               
-               {/* Feature Icons */}
                <div className="flex flex-wrap gap-8 border-t border-white/10 pt-6">
                   {[
                     { icon: Beer, label: "Home Brews" },
@@ -527,12 +615,12 @@ const App: React.FC = () => {
 
              <div className="flex justify-start lg:justify-end pb-2">
                 <button 
-                  onClick={() => scrollToSection('bookings')}
+                  onClick={handleBooking}
                   className="group relative px-8 py-4 bg-white/5 border border-white/20 text-white font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-orange-500 hover:border-orange-500 hover:text-black overflow-hidden rounded-full"
                   data-hover="true"
                 >
                    <span className="relative z-10 flex items-center gap-2">
-                     View Full Menu <ArrowUpRight className="w-4 h-4" />
+                     Book Now <ArrowUpRight className="w-4 h-4" />
                    </span>
                 </button>
              </div>
@@ -587,24 +675,23 @@ const App: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedFeature(null)}
-            className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-md cursor-auto"
+            className="fixed inset-0 z-[60] flex items-end md:items-center justify-center p-0 md:p-6 bg-black/90 backdrop-blur-xl cursor-auto"
           >
             <motion.div
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-6xl bg-[#1a1a1a] border-t md:border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl shadow-orange-500/10 group/modal h-[100dvh] md:h-[85vh] rounded-none md:rounded-2xl"
+              className="relative w-full max-w-4xl bg-[#1a1a1a] border-t md:border border-white/10 overflow-hidden flex flex-col shadow-2xl shadow-orange-500/10 group/modal h-[90dvh] md:h-[85vh] rounded-t-3xl md:rounded-3xl"
             >
               <button
                 onClick={() => setSelectedFeature(null)}
-                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors"
-                data-hover="true"
+                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md"
               >
                 <X className="w-6 h-6" />
               </button>
 
-              <div className="w-full md:w-1/2 h-56 md:h-full relative overflow-hidden shrink-0 group/image">
+              <div className="w-full h-[220px] md:h-[280px] relative shrink-0 group/image">
                 <AnimatePresence mode="wait">
                   <motion.img 
                     key={selectedFeature.id}
@@ -617,121 +704,137 @@ const App: React.FC = () => {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 </AnimatePresence>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent md:bg-gradient-to-r" />
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/40 to-transparent" />
 
-                {/* Mobile Navigation Controls - Moved here to clear text area */}
-                <div className="absolute bottom-4 left-4 right-4 flex justify-between md:hidden z-20">
-                     <button
-                        onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }}
-                        className="p-3 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-sm"
-                        aria-label="Previous Feature"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }}
-                        className="p-3 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-sm"
-                        aria-label="Next Feature"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md opacity-0 group-hover/image:opacity-100 duration-300 md:block hidden"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md opacity-0 group-hover/image:opacity-100 duration-300 md:block hidden"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+
+                 <div className="absolute bottom-4 right-4 flex gap-2 md:hidden z-20">
+                   <button onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }} className="p-2 rounded-full bg-black/50 border border-white/10 text-white"><ChevronLeft className="w-5 h-5" /></button>
+                   <button onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }} className="p-2 rounded-full bg-black/50 border border-white/10 text-white"><ChevronRight className="w-5 h-5" /></button>
+                 </div>
+
+                <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col justify-end items-start z-10">
+                   <div className="flex items-center gap-3 text-orange-500 mb-2">
+                     <Calendar className="w-4 h-4" />
+                     <span className="font-mono text-xs md:text-sm tracking-widest uppercase">{selectedFeature.tag}</span>
+                   </div>
+                   <h3 className="text-3xl md:text-5xl font-heading font-black uppercase leading-none text-white mb-1 tracking-tighter shadow-black drop-shadow-lg">
+                      {selectedFeature.name}
+                   </h3>
+                   <p className="text-base md:text-xl text-amber-500 font-medium tracking-widest uppercase">
+                      {selectedFeature.category}
+                   </p>
                 </div>
               </div>
 
-              {/* Desktop Navigation Controls */}
-              <button
-                onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }}
-                className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-sm"
-                data-hover="true"
-                aria-label="Previous Feature"
+              <div 
+                 ref={modalScrollRef}
+                 onScroll={handleModalScroll} 
+                 className="flex-1 overflow-y-auto bg-[#1a1a1a] relative scroll-smooth"
+                 style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}
               >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
+                 <div className="max-w-4xl mx-auto p-5 md:p-8">
+                    <p className="text-gray-300 leading-relaxed text-sm md:text-base font-light mb-8 max-w-2xl">
+                       {selectedFeature.description}
+                    </p>
 
-              <button
-                onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }}
-                className="hidden md:block absolute right-4 md:right-8 bottom-8 md:top-1/2 md:bottom-auto md:-translate-y-1/2 z-20 p-3 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-sm"
-                data-hover="true"
-                aria-label="Next Feature"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
+                    {selectedFeature.id === 'e1' ? (
+                       <>
+                         <div className="sticky top-0 z-30 py-2 mb-6 -mx-5 px-5 md:-mx-8 md:px-8 bg-[#1a1a1a]/95 backdrop-blur-sm border-b border-white/5 flex justify-start overflow-x-auto no-scrollbar">
+                             <div className="relative flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1 shadow-2xl">
+                                 {MUSIC_SCHEDULE.map((month, idx) => {
+                                     const isActive = activeMonth === idx;
+                                     return (
+                                         <button
+                                             key={idx}
+                                             onClick={() => scrollToMonth(idx)}
+                                             className={`relative px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-colors duration-300 z-10 shrink-0 ${isActive ? 'text-black' : 'text-gray-400 hover:text-white'}`}
+                                         >
+                                             {isActive && (
+                                                 <motion.div
+                                                     layoutId="activePill"
+                                                     className="absolute inset-0 bg-orange-500 rounded-full -z-10"
+                                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                                 />
+                                             )}
+                                             {month.month}
+                                         </button>
+                                     );
+                                 })}
+                             </div>
+                         </div>
 
-              <div className="w-full md:w-1/2 flex flex-col relative h-full min-h-0 bg-[#1a1a1a]">
-                <motion.div
-                  key={selectedFeature.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="flex flex-col h-full w-full p-4 md:p-12"
-                >
-                  <div className="flex items-center gap-3 text-orange-500 mb-2 md:mb-4 shrink-0">
-                     <Calendar className="w-4 h-4" />
-                     <span className="font-mono text-xs md:text-sm tracking-widest uppercase">{selectedFeature.tag}</span>
-                  </div>
-                  
-                  <h3 className="text-3xl md:text-5xl font-heading font-bold uppercase leading-none mb-2 text-white shrink-0">
-                    {selectedFeature.name}
-                  </h3>
-                  
-                  <p className="text-base md:text-lg text-amber-500 font-medium tracking-widest uppercase mb-6 shrink-0">
-                    {selectedFeature.category}
-                  </p>
-                  
-                  <div className="h-px w-20 bg-white/20 mb-6 shrink-0" />
-                  
-                  {/* Conditional Rendering: Schedule for Music Event, Text for others */}
-                  {selectedFeature.id === 'e1' ? (
-                     <div className="flex-1 overflow-y-auto pr-2 -mr-2 overscroll-contain pb-safe" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}>
-                        <p className="text-gray-300 leading-relaxed text-sm font-light mb-8">
-                          {selectedFeature.description}
-                        </p>
-                        
-                        <h4 className="text-lg md:text-xl font-heading font-bold text-white sticky top-0 bg-[#1a1a1a] py-3 z-20 border-b border-white/10 shadow-xl flex items-center gap-2">
-                          <Music className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
-                          2026 LINEUP
-                        </h4>
-                        
-                        <div className="space-y-1 pb-24">
+                         <div className="space-y-8 pb-24">
                           {MUSIC_SCHEDULE.map((month, idx) => (
-                             <div key={idx} className="relative">
-                               <div className="sticky top-[3.25rem] z-10 bg-[#1a1a1a] py-2 md:py-3 border-b border-white/5 flex items-center">
-                                 <div className="w-2 h-2 rounded-full bg-orange-500 mr-2"></div>
-                                 <h5 className="text-orange-500 font-mono font-bold uppercase tracking-widest text-xs md:text-sm">
+                             <div key={idx} id={`month-section-${idx}`} className="relative scroll-mt-32">
+                               <div className="flex items-center gap-4 mb-6">
+                                 <h5 className="text-4xl md:text-5xl font-heading font-black uppercase text-white/5 tracking-tighter">
                                    {month.month}
                                  </h5>
+                                 <div className="h-px flex-1 bg-gradient-to-r from-orange-500/30 to-transparent" />
                                </div>
-                               <div className="pt-2 pb-4 space-y-2">
+
+                               <div className="space-y-3">
                                  {month.events.map((event, i) => (
-                                   <div key={i} className={`flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-lg border ${event.special ? 'bg-orange-500/5 border-orange-500/30' : 'bg-white/5 border-transparent'} hover:bg-white/10 transition-colors group/item`}>
-                                      <div className="w-16 md:w-20 shrink-0 flex flex-col justify-center border-r border-white/10 pr-3 md:pr-4">
-                                        <span className="font-heading font-bold text-white/90 text-xs md:text-sm leading-tight">{event.date.split(' ')[0]}</span>
-                                        <span className="font-mono text-xl md:text-2xl font-bold text-white leading-none">{event.date.split(' ')[1]}</span>
+                                   <div key={i} onClick={handleBooking} className={`cursor-pointer relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-300 group/item overflow-hidden ${event.special ? 'bg-gradient-to-r from-orange-500/10 to-transparent border-orange-500/40' : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'}`}>
+                                      <div className="flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-black/40 border border-white/10 shrink-0 backdrop-blur-sm group-hover/item:border-orange-500/50 transition-colors">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">{event.date.split(' ')[0]}</span>
+                                        <span className="text-xl font-bold font-mono text-white">{event.date.split(' ')[1].replace(/(st|nd|rd|th)/, '')}</span>
                                       </div>
-                                      <div className="flex-1">
-                                        <div className={`font-bold uppercase tracking-wide text-base md:text-lg leading-tight ${event.special ? 'text-orange-500' : event.highlight ? 'text-white' : 'text-gray-300 group-hover/item:text-white'}`}>
+                                      <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-full md:rounded-lg overflow-hidden border border-white/10 relative shadow-lg">
+                                        <img 
+                                          src={event.image} 
+                                          alt={event.act} 
+                                          className="w-full h-full object-cover transform group-hover/item:scale-110 transition-transform duration-500"
+                                        />
+                                        <div className="absolute inset-0 bg-black/20 group-hover/item:bg-transparent transition-colors" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <h4 className={`text-lg md:text-xl font-heading font-bold uppercase truncate pr-4 ${event.special ? 'text-orange-500' : 'text-white'}`}>
                                           {event.act}
-                                        </div>
-                                        {event.note && (
-                                          <div className="text-[10px] md:text-xs text-amber-500 font-bold uppercase mt-1 tracking-wider">{event.note}</div>
-                                        )}
+                                        </h4>
+                                        {event.note ? (
+                                          <div className="flex items-center gap-2 mt-1">
+                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-orange-500 text-black">
+                                              {event.note}
+                                            </span>
+                                          </div>
+                                        ) : event.highlight ? (
+                                           <div className="flex items-center gap-2 mt-1">
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 group-hover/item:text-orange-500 transition-colors">
+                                              Headliner
+                                            </span>
+                                           </div>
+                                        ) : null}
+                                      </div>
+                                      <div className="opacity-0 group-hover/item:opacity-100 transition-opacity -translate-x-4 group-hover/item:translate-x-0 duration-300 text-orange-500 hidden md:block">
+                                        <ChevronRight className="w-6 h-6" />
                                       </div>
                                    </div>
                                  ))}
                                </div>
                              </div>
                           ))}
-                        </div>
-                     </div>
-                  ) : (
-                    <div className="overflow-y-auto pr-2 -mr-2 pb-12" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}>
-                      <p className="text-gray-300 leading-relaxed text-base md:text-lg font-light mb-8">
-                        {selectedFeature.description}
-                      </p>
-                    </div>
-                  )}
-
-                </motion.div>
+                         </div>
+                       </>
+                    ) : (
+                      <div className="pb-24">
+                        <button onClick={handleBooking} className="w-full py-6 rounded-2xl bg-orange-500 text-black font-bold uppercase tracking-widest hover:bg-white transition-colors">Book Experience Now</button>
+                      </div>
+                    )}
+                 </div>
               </div>
             </motion.div>
           </motion.div>
