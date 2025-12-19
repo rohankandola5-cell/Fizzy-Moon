@@ -6,95 +6,213 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Ticket, Globe, Zap, Music, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Utensils, Beer, PartyPopper, Trophy, Users, Crown, Wine, Armchair, Briefcase, Star, Flame, ArrowUpRight, Mic2, Clock } from 'lucide-react';
+import { Ticket, Globe, Zap, Music, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Utensils, Beer, PartyPopper, Trophy, Users, Crown, Wine, Armchair, Briefcase, Star, Flame, ArrowUpRight, Mic2, Clock, ArrowLeft } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
 import CustomCursor from './components/CustomCursor';
 import ArtistCard from './components/ArtistCard';
 import Bubbles from './components/Bubbles';
-import AIChat from './components/AIChat';
 import FAQAccordion from './components/FAQAccordion';
+import Preloader from './components/Preloader';
 import { FeatureItem } from './types';
+import AIChat from './components/AIChat';
+import AudioPlayer from './components/AudioPlayer';
 
 const BOOKING_URL = "https://www.sevenrooms.com/explore/fizzymoonbrewhouse/reservations/create/search/";
 
 // BAND IMAGES PLACEHOLDERS
 const BAND_IMAGES = {
-  jackPrice: "https://images.unsplash.com/photo-1516280440614-6697288d5d38?auto=format&fit=crop&w=300&q=80",
-  innerCity: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=300&q=80",
-  kingKandola: "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?auto=format&fit=crop&w=300&q=80",
-  tovey: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=80",
-  tiago: "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=300&q=80",
-  mockingJays: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=300&q=80",
-  djRoss: "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?auto=format&fit=crop&w=300&q=80",
-  carl: "https://images.unsplash.com/photo-1514525253440-b393452e8d26?auto=format&fit=crop&w=300&q=80",
-  coverBuoys: "https://images.unsplash.com/photo-1459749411177-d4a414c9ff5f?auto=format&fit=crop&w=300&q=80",
-  quest: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=300&q=80",
-  backCat: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=300&q=80",
-  chasingDeer: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=300&q=80",
-  cole: "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=300&q=80",
-  viva: "https://images.unsplash.com/photo-1604093882750-3ed498f3178b?auto=format&fit=crop&w=300&q=80",
-  izzy: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=300&q=80",
-  thom: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=300&q=80",
-  andy: "https://images.unsplash.com/photo-1525994886773-080587e161c2?auto=format&fit=crop&w=300&q=80",
+  jackPrice: "https://images.unsplash.com/photo-1516280440614-6697288d5d38?auto=format&fit=crop&w=800&q=80",
+  innerCity: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80",
+  kingKandola: "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?auto=format&fit=crop&w=800&q=80",
+  tovey: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
+  tiago: "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=800&q=80",
+  mockingJays: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80",
+  djRoss: "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?auto=format&fit=crop&w=800&q=80",
+  carl: "https://images.unsplash.com/photo-1514525253440-b393452e8d26?auto=format&fit=crop&w=800&q=80",
+  coverBuoys: "https://images.unsplash.com/photo-1459749411177-d4a414c9ff5f?auto=format&fit=crop&w=800&q=80",
+  quest: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=800&q=80",
+  backCat: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80",
+  chasingDeer: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80",
+  cole: "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=800&q=80",
+  viva: "https://images.unsplash.com/photo-1604093882750-3ed498f3178b?auto=format&fit=crop&w=800&q=80",
+  izzy: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80",
+  thom: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=800&q=80",
+  andy: "https://images.unsplash.com/photo-1525994886773-080587e161c2?auto=format&fit=crop&w=800&q=80",
 };
 
-// MUSIC SCHEDULE DATA 2026
+// MUSIC SCHEDULE DATA 2026 WITH DESCRIPTIONS
 const MUSIC_SCHEDULE = [
   {
     month: 'January',
     events: [
-      { date: 'Fri 2nd', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 3rd', act: 'Inner City 3', highlight: true, image: BAND_IMAGES.innerCity },
-      { date: 'Fri 9th', act: 'King Kandola', highlight: true, image: BAND_IMAGES.kingKandola },
-      { date: 'Sat 10th', act: 'Tovey Brothers', highlight: true, image: BAND_IMAGES.tovey },
-      { date: 'Fri 16th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 17th', act: "Tiago & The Amigo's", highlight: true, image: BAND_IMAGES.tiago },
-      { date: 'Fri 23rd', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 24th', act: "The MockingJay's", highlight: true, image: BAND_IMAGES.mockingJays },
-      { date: 'Fri 30th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
-      { date: 'Sat 31st', act: 'CARL SINCLAIR', special: true, image: BAND_IMAGES.carl },
+      { 
+        date: 'Fri 2nd', 
+        act: 'Jack Price', 
+        image: BAND_IMAGES.jackPrice,
+        genre: 'Acoustic / Indie',
+        time: '9:00 PM',
+        description: 'Jack Price brings a soulful energy to the stage, blending classic indie anthems with a modern acoustic twist. A local favorite known for his raw vocals and captivating stage presence that gets the whole room singing along.'
+      },
+      { 
+        date: 'Sat 3rd', 
+        act: 'Inner City 3', 
+        highlight: true, 
+        image: BAND_IMAGES.innerCity,
+        genre: 'House / Dance Classics',
+        time: '9:30 PM',
+        description: 'Get ready for a high-octane journey through the history of dance music. Inner City 3 delivers punchy covers of the biggest house and electronic tracks from the 90s to today. Bring your dancing shoes.'
+      },
+      { 
+        date: 'Fri 9th', 
+        act: 'King Kandola', 
+        highlight: true, 
+        image: BAND_IMAGES.kingKandola,
+        genre: 'Rock / Pop',
+        time: '9:00 PM',
+        description: 'A powerhouse front-man with a voice that commands attention. King Kandola fuses rock swagger with pop sensibilities, delivering a setlist that ranges from Queen to The Killers.'
+      },
+      { 
+        date: 'Sat 10th', 
+        act: 'Tovey Brothers', 
+        highlight: true, 
+        image: BAND_IMAGES.tovey,
+        genre: 'Classic Rock & Soul',
+        time: '9:30 PM',
+        description: 'The Tovey Brothers are a musical institution. Expect tight harmonies, virtuoso guitar work, and a setlist packed with timeless classics from the 60s, 70s, and 80s.'
+      },
+      { 
+        date: 'Fri 16th', 
+        act: 'Jack Price', 
+        image: BAND_IMAGES.jackPrice,
+        genre: 'Acoustic / Indie',
+        time: '9:00 PM',
+        description: 'Jack Price returns for another intimate yet energetic Friday night session. Perfect for starting your weekend with great vibes and cold drinks.'
+      },
+      { 
+        date: 'Sat 17th', 
+        act: "Tiago & The Amigo's", 
+        highlight: true, 
+        image: BAND_IMAGES.tiago,
+        genre: 'Latin / Funk / Pop',
+        time: '9:30 PM',
+        description: 'A fusion of infectious Latin rhythms, funk grooves, and pop hits. Tiago & The Amigos bring a carnival atmosphere to Fizzy Moon that is impossible to resist.'
+      },
+      { 
+        date: 'Fri 23rd', 
+        act: 'Jack Price', 
+        image: BAND_IMAGES.jackPrice,
+        genre: 'Acoustic / Indie',
+        time: '9:00 PM',
+        description: 'Our resident Friday night maestro. Jack digs deep into his repertoire to bring you B-sides and fan favorites alongside the hits.'
+      },
+      { 
+        date: 'Sat 24th', 
+        act: "The MockingJay's", 
+        highlight: true, 
+        image: BAND_IMAGES.mockingJays,
+        genre: 'Modern Rock / Alt-Pop',
+        time: '9:30 PM',
+        description: 'Sharp, stylish, and incredibly tight. The MockingJays tear through modern rock and alt-pop bangers with an energy that fills the floor.'
+      },
+      { 
+        date: 'Fri 30th', 
+        act: 'DJ ROSS', 
+        special: true, 
+        image: BAND_IMAGES.djRoss,
+        genre: 'Open Format DJ',
+        time: '8:00 PM - Late',
+        description: 'Leamington’s finest selector takes over the decks. From disco edits to R&B throwbacks and house anthems, DJ Ross knows exactly how to read the room.'
+      },
+      { 
+        date: 'Sat 31st', 
+        act: 'CARL SINCLAIR', 
+        special: true, 
+        image: BAND_IMAGES.carl,
+        genre: 'Piano / Vocals',
+        time: '9:00 PM',
+        description: 'The Piano Man himself. Carl Sinclair brings his legendary boogie-woogie piano style and soulful voice for a night of rock n roll and rhythm & blues.'
+      },
     ]
   },
   {
     month: 'February',
     events: [
-      { date: 'Fri 6th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 7th', act: 'Cover Buoys', highlight: true, image: BAND_IMAGES.coverBuoys },
-      { date: 'Fri 13th', act: 'King Kandola', highlight: true, image: BAND_IMAGES.kingKandola },
-      { date: 'Sat 14th', act: 'QUEST TRIO', special: true, image: BAND_IMAGES.quest },
-      { date: 'Fri 20th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
-      { date: 'Sat 21st', act: 'Back Catalogue', highlight: true, image: BAND_IMAGES.backCat },
-      { date: 'Fri 27th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 28th', act: 'CARL SINCLAIR', special: true, image: BAND_IMAGES.carl },
+      { 
+        date: 'Fri 6th', 
+        act: 'Jack Price', 
+        image: BAND_IMAGES.jackPrice,
+        genre: 'Acoustic / Indie',
+        time: '9:00 PM',
+        description: 'Warm up your February Friday with Jack Price. The perfect soundtrack to our craft ales and signature cocktails.'
+      },
+      { 
+        date: 'Sat 7th', 
+        act: 'Cover Buoys', 
+        highlight: true, 
+        image: BAND_IMAGES.coverBuoys,
+        genre: 'Party Band',
+        time: '9:30 PM',
+        description: 'Fun, frantic, and fantastic. The Cover Buoys don’t take themselves too seriously, but they take the music very seriously. Expect surprise mashups and singalongs.'
+      },
+      { 
+        date: 'Fri 13th', 
+        act: 'King Kandola', 
+        highlight: true, 
+        image: BAND_IMAGES.kingKandola,
+        genre: 'Rock / Pop',
+        time: '9:00 PM',
+        description: 'King Kandola is back to rock the house. A high-energy performance guaranteed to shake off the winter blues.'
+      },
+      { 
+        date: 'Sat 14th', 
+        act: 'QUEST TRIO', 
+        special: true, 
+        image: BAND_IMAGES.quest,
+        genre: 'Jazz / Soul / Pop',
+        time: '9:30 PM',
+        description: 'A special Valentine’s performance. Smooth jazz standards, soulful ballads, and romantic pop arrangements from this talented trio.'
+      },
+      { 
+        date: 'Fri 20th', 
+        act: 'DJ ROSS', 
+        special: true, 
+        image: BAND_IMAGES.djRoss,
+        genre: 'Open Format DJ',
+        time: '8:00 PM - Late',
+        description: 'Friday Night Fever with DJ Ross. Spinning the tracks that make you move, from old school classics to fresh cuts.'
+      },
+      { 
+        date: 'Sat 21st', 
+        act: 'Back Catalogue', 
+        highlight: true, 
+        image: BAND_IMAGES.backCat,
+        genre: 'Decades / Pop',
+        time: '9:30 PM',
+        description: 'A musical journey through the decades. Back Catalogue picks the very best tracks from the 70s, 80s, 90s, and 00s for a nostalgia-filled party.'
+      },
     ]
   },
   {
     month: 'March',
     events: [
-      { date: 'Fri 6th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 7th', act: 'Chasing Deer', highlight: true, image: BAND_IMAGES.chasingDeer },
-      { date: 'Fri 13th', act: 'King Kandola', highlight: true, image: BAND_IMAGES.kingKandola },
-      { date: 'Sat 14th', act: "Tiago & The Amigo's", highlight: true, image: BAND_IMAGES.tiago },
-      { date: 'Sun 15th', act: 'COLE (2/3pm)', note: 'MOTHERS DAY !!!', special: true, image: BAND_IMAGES.cole },
-      { date: 'Fri 20th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
-      { date: 'Sat 21st', act: 'Viva La Diva (Josie)', highlight: true, image: BAND_IMAGES.viva },
-      { date: 'Fri 27th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 28th', act: 'Back Catalogue', highlight: true, image: BAND_IMAGES.backCat },
+      { date: 'Fri 6th', act: 'Jack Price', image: BAND_IMAGES.jackPrice, genre: 'Acoustic', time: '9:00 PM', description: 'Acoustic vibes in the main bar.' },
+      { date: 'Sat 7th', act: 'Chasing Deer', highlight: true, image: BAND_IMAGES.chasingDeer, genre: 'Indie Pop', time: '9:30 PM', description: 'Energetic indie pop band hailing from London. Catchy choruses and great vibes.' },
+      { date: 'Fri 13th', act: 'King Kandola', highlight: true, image: BAND_IMAGES.kingKandola, genre: 'Rock', time: '9:00 PM', description: 'The King returns to rock the main stage.' },
+      { date: 'Sat 14th', act: "Tiago & The Amigo's", highlight: true, image: BAND_IMAGES.tiago, genre: 'Latin', time: '9:30 PM', description: 'Latin fever takes over Fizzy Moon.' },
+      { date: 'Sun 15th', act: 'COLE', note: 'MOTHERS DAY !!!', special: true, image: BAND_IMAGES.cole, genre: 'Soul / Swing', time: '2:00 PM', description: 'A relaxed afternoon set for Mother’s Day, featuring smooth soul and swing classics.' },
+      { date: 'Fri 20th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss, genre: 'DJ Set', time: '8:00 PM', description: 'Friday beats until late.' },
+      { date: 'Sat 21st', act: 'Viva La Diva (Josie)', highlight: true, image: BAND_IMAGES.viva, genre: 'Pop Divas', time: '9:30 PM', description: 'A tribute to the greatest divas of pop, from Whitney to Beyoncé.' },
     ]
   },
   {
     month: 'April',
     events: [
-      { date: 'Fri 3rd', act: 'Jack Price', note: 'GOOD FRIDAY', special: true, image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 4th', act: 'IZZY OWEN TRIO', special: true, image: BAND_IMAGES.izzy },
-      { date: 'Sun 5th', act: 'Thom Kirkpatrick', note: 'EASTER SUNDAY', special: true, image: BAND_IMAGES.thom },
-      { date: 'Fri 10th', act: 'King Kandola', special: true, image: BAND_IMAGES.kingKandola },
-      { date: 'Sat 11th', act: 'Andy Flynn Trio', highlight: true, image: BAND_IMAGES.andy },
-      { date: 'Fri 17th', act: 'DJ ROSS', special: true, image: BAND_IMAGES.djRoss },
-      { date: 'Sat 18th', act: 'CARL SINCLAIR', special: true, image: BAND_IMAGES.carl },
-      { date: 'Fri 24th', act: 'Jack Price', image: BAND_IMAGES.jackPrice },
-      { date: 'Sat 25th', act: 'Cover Buoys', highlight: true, image: BAND_IMAGES.coverBuoys },
+      { date: 'Fri 3rd', act: 'Jack Price', note: 'GOOD FRIDAY', special: true, image: BAND_IMAGES.jackPrice, genre: 'Acoustic', time: '9:00 PM', description: 'Good Friday special.' },
+      { date: 'Sat 4th', act: 'IZZY OWEN TRIO', special: true, image: BAND_IMAGES.izzy, genre: 'Contemporary Pop', time: '9:30 PM', description: 'Fresh arrangements of contemporary hits featuring stunning vocals.' },
+      { date: 'Sun 5th', act: 'Thom Kirkpatrick', note: 'EASTER SUNDAY', special: true, image: BAND_IMAGES.thom, genre: 'One Man Band', time: '8:00 PM', description: 'An incredible one-man-band loop pedal experience. You have to see it to believe it.' },
+      { date: 'Fri 10th', act: 'King Kandola', special: true, image: BAND_IMAGES.kingKandola, genre: 'Rock', time: '9:00 PM', description: 'Rock n Roll Friday.' },
+      { date: 'Sat 11th', act: 'Andy Flynn Trio', highlight: true, image: BAND_IMAGES.andy, genre: 'Irish / Folk', time: '9:30 PM', description: 'Foot-stomping folk and Irish classics to get the party started.' },
     ]
   }
 ];
@@ -161,8 +279,13 @@ const App: React.FC = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   
+  const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Modal States
   const [selectedFeature, setSelectedFeature] = useState<FeatureItem | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<any | null>(null); // For Drill-down view
+  
   const modalScrollRef = useRef<HTMLDivElement>(null);
   const [activeMonth, setActiveMonth] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
@@ -181,12 +304,20 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!selectedFeature) return;
-      if (e.key === 'ArrowLeft') navigateFeature('prev');
-      if (e.key === 'ArrowRight') navigateFeature('next');
-      if (e.key === 'Escape') setSelectedFeature(null);
+      if (e.key === 'ArrowLeft' && !selectedEvent) navigateFeature('prev');
+      if (e.key === 'ArrowRight' && !selectedEvent) navigateFeature('next');
+      if (e.key === 'Escape') {
+        if (selectedEvent) setSelectedEvent(null);
+        else setSelectedFeature(null);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedFeature, selectedEvent]);
+
+  // Reset drill-down when feature changes
+  useEffect(() => {
+    setSelectedEvent(null);
   }, [selectedFeature]);
 
   const handleBooking = () => {
@@ -197,7 +328,8 @@ const App: React.FC = () => {
     setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      const headerOffset = 100;
+      // Changed offset to 0 to minimize gap between header and content
+      const headerOffset = 0; 
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
@@ -270,16 +402,21 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen text-white selection:bg-orange-500 selection:text-black cursor-auto md:cursor-none overflow-x-hidden font-sans">
+    <div className="relative min-h-screen text-white selection:bg-[#f78e2c] selection:text-black cursor-auto md:cursor-none overflow-x-hidden font-sans">
+      <AnimatePresence>
+        {loading && <Preloader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+
       <CustomCursor />
-      <AIChat />
       <FluidBackground />
+      <AIChat />
+      <AudioPlayer />
       
       {/* Navigation - Z-50 (Highest) */}
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled 
-            ? 'py-4 bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-lg pointer-events-auto' 
+            ? 'py-4 bg-[#0b1219]/80 backdrop-blur-xl border-b border-white/10 shadow-lg pointer-events-auto' 
             : 'py-6 pointer-events-none'
         }`}
       >
@@ -295,7 +432,7 @@ const App: React.FC = () => {
           </div>
           
           {/* Desktop Menu - Centered */}
-          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto bg-black/30 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] gap-1 z-50 ring-1 ring-white/5">
+          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto bg-[#15222e]/30 backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] gap-1 z-50 ring-1 ring-white/5">
             {navItems.map((item) => (
               <button 
                 key={item} 
@@ -313,7 +450,7 @@ const App: React.FC = () => {
             {/* Desktop Book Now */}
             <button
               onClick={handleBooking}
-              className="hidden md:flex items-center gap-2 bg-orange-500 text-black px-6 py-3 rounded-full font-bold font-heading text-xs tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.4)] border border-orange-500"
+              className="hidden md:flex items-center gap-2 bg-[#f78e2c] text-black px-6 py-3 rounded-full font-bold font-heading text-xs tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(247,142,44,0.4)] border border-[#f78e2c]"
               data-hover="true"
             >
               <Calendar className="w-4 h-4" />
@@ -323,7 +460,7 @@ const App: React.FC = () => {
             {/* Mobile Book Button */}
             <button
               onClick={handleBooking}
-              className="md:hidden flex items-center gap-2 bg-orange-500 text-black px-4 py-2.5 rounded-full font-bold font-heading text-[10px] tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.4)] border border-orange-500"
+              className="md:hidden flex items-center gap-2 bg-[#f78e2c] text-black px-4 py-2.5 rounded-full font-bold font-heading text-[10px] tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(247,142,44,0.4)] border border-[#f78e2c]"
               data-hover="true"
             >
               <Calendar className="w-3.5 h-3.5" />
@@ -356,13 +493,13 @@ const App: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 top-0 z-40 bg-[#1a1a1a]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden h-screen w-screen"
+            className="fixed inset-0 top-0 z-40 bg-[#15222e]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden h-screen w-screen"
           >
             {navItems.map((item) => (
               <button
                 key={item}
                 onClick={() => scrollToSection(getSectionId(item))}
-                className="text-3xl font-heading font-bold text-white hover:text-orange-500 transition-colors uppercase bg-transparent border-none text-center px-4"
+                className="text-3xl font-heading font-bold text-white hover:text-[#f78e2c] transition-colors uppercase bg-transparent border-none text-center px-4"
               >
                 {item}
               </button>
@@ -382,10 +519,10 @@ const App: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="flex items-center gap-3 md:gap-6 text-xs md:text-base font-mono text-orange-500 tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 bg-black/40 px-6 py-2 rounded-full backdrop-blur-md border border-white/10"
+            className="flex items-center gap-3 md:gap-6 text-xs md:text-base font-mono text-[#f78e2c] tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 bg-[#15222e]/40 px-6 py-2 rounded-full backdrop-blur-md border border-white/10"
           >
             <span>Leamington Spa</span>
-            <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-500 rounded-full animate-pulse"/>
+            <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#f78e2c] rounded-full animate-pulse"/>
             <span>Open Daily</span>
           </motion.div>
 
@@ -401,7 +538,7 @@ const App: React.FC = () => {
               className="text-[15vw] md:text-[14vw] leading-[0.8] font-black tracking-tighter text-center" 
             />
             <motion.div 
-               className="absolute -z-20 w-[60vw] h-[60vw] bg-orange-600/10 blur-[60px] rounded-full pointer-events-none will-change-transform"
+               className="absolute -z-20 w-[60vw] h-[60vw] bg-[#f78e2c]/10 blur-[60px] rounded-full pointer-events-none will-change-transform"
                animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.2, 0.4, 0.2] }}
                transition={{ duration: 8, repeat: Infinity }}
                style={{ transform: 'translateZ(0)' }}
@@ -412,7 +549,7 @@ const App: React.FC = () => {
              initial={{ scaleX: 0 }}
              animate={{ scaleX: 1 }}
              transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-             className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent mt-4 md:mt-8 mb-6 md:mb-8"
+             className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-[#f78e2c]/50 to-transparent mt-4 md:mt-8 mb-6 md:mb-8"
           />
 
           <motion.button
@@ -428,7 +565,7 @@ const App: React.FC = () => {
         </motion.div>
 
         {/* MARQUEE */}
-        <div className="absolute bottom-12 md:bottom-16 left-0 w-full py-4 md:py-6 bg-orange-500 text-black z-20 overflow-hidden border-y-4 border-black shadow-[0_0_40px_rgba(249,115,22,0.2)]">
+        <div className="absolute bottom-12 md:bottom-16 left-0 w-full py-4 md:py-6 bg-[#f78e2c] text-black z-20 overflow-hidden border-y-4 border-black shadow-[0_0_40px_rgba(247,142,44,0.2)]">
           <motion.div 
             className="flex w-fit will-change-transform"
             animate={{ x: "-50%" }}
@@ -438,9 +575,12 @@ const App: React.FC = () => {
               <div key={key} className="flex whitespace-nowrap shrink-0">
                 {[...Array(4)].map((_, i) => (
                   <span key={i} className="text-3xl md:text-5xl font-heading font-black px-8 flex items-center gap-4">
-                    CRAFT BEER <span className="text-white text-2xl md:text-4xl">●</span> 
-                    COCKTAILS <span className="text-white text-2xl md:text-4xl">●</span> 
                     LIVE MUSIC <span className="text-white text-2xl md:text-4xl">●</span> 
+                    LUXE LOUNGE <span className="text-white text-2xl md:text-4xl">●</span> 
+                    COCKTAILS <span className="text-white text-2xl md:text-4xl">●</span> 
+                    VIP HUT <span className="text-white text-2xl md:text-4xl">●</span> 
+                    SUNDAY ROAST <span className="text-white text-2xl md:text-4xl">●</span> 
+                    CRAFT BEER <span className="text-white text-2xl md:text-4xl">●</span> 
                   </span>
                 ))}
               </div>
@@ -450,7 +590,7 @@ const App: React.FC = () => {
       </header>
 
       {/* BOOKINGS SECTION */}
-      <section id="bookings" className="relative z-10 py-20 md:py-32 px-4 md:px-6 bg-gradient-to-b from-[#111] to-[#1a1a1a] border-t border-white/10">
+      <section id="bookings" className="relative z-10 py-20 md:py-32 px-4 md:px-6 bg-gradient-to-b from-[#0b1219] to-[#15222e] border-t border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 md:mb-20">
              <h2 className="text-5xl md:text-9xl font-heading font-bold opacity-10 text-white leading-none">
@@ -458,7 +598,7 @@ const App: React.FC = () => {
              </h2>
              <div className="relative -mt-6 md:-mt-16 z-10">
                <p className="text-3xl md:text-5xl font-elegant italic text-white mb-2">Secure your spot</p>
-               <p className="text-orange-500 font-mono uppercase tracking-widest text-sm md:text-base">
+               <p className="text-[#f78e2c] font-mono uppercase tracking-widest text-sm md:text-base">
                  Choose your experience
                </p>
              </div>
@@ -496,7 +636,7 @@ const App: React.FC = () => {
                 subtitle: 'Celebration Central',
                 price: 'Book Now', 
                 color: 'gold', 
-                accent: 'bg-gradient-to-br from-orange-500/20 to-black border-orange-500/60 hover:border-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.1)]', 
+                accent: 'bg-gradient-to-br from-[#f78e2c]/20 to-black border-[#f78e2c]/60 hover:border-[#f78e2c] shadow-[0_0_30px_rgba(247,142,44,0.1)]', 
                 desc: 'The best seat in the house. Located centrally in our heated marquee. Perfect for birthdays and those who want to be seen.',
                 features: [
                   { icon: Crown, text: 'Center of Action' },
@@ -527,9 +667,9 @@ const App: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
                        <h3 className="text-2xl md:text-3xl font-heading font-bold text-white leading-none">{ticket.name}</h3>
-                       {ticket.color === 'gold' && <Crown className="text-orange-500 w-6 h-6 animate-pulse" />}
+                       {ticket.color === 'gold' && <Crown className="text-[#f78e2c] w-6 h-6 animate-pulse" />}
                     </div>
-                    <p className={`text-sm font-bold uppercase tracking-widest mb-6 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : ticket.color === 'purple' ? 'text-purple-500' : 'text-cyan-500'}`}>
+                    <p className={`text-sm font-bold uppercase tracking-widest mb-6 ${ticket.color === 'gold' ? 'text-[#f78e2c]' : ticket.color === 'pink' ? 'text-red-500' : ticket.color === 'purple' ? 'text-purple-500' : 'text-cyan-500'}`}>
                       {ticket.subtitle}
                     </p>
                     
@@ -541,7 +681,7 @@ const App: React.FC = () => {
                       {ticket.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center gap-4">
                           <div className={`p-2 rounded-full bg-white/5`}>
-                             <feature.icon className={`w-4 h-4 ${ticket.color === 'gold' ? 'text-orange-500' : ticket.color === 'pink' ? 'text-red-500' : ticket.color === 'purple' ? 'text-purple-500' : 'text-cyan-500'}`} /> 
+                             <feature.icon className={`w-4 h-4 ${ticket.color === 'gold' ? 'text-[#f78e2c]' : ticket.color === 'pink' ? 'text-red-500' : ticket.color === 'purple' ? 'text-purple-500' : 'text-cyan-500'}`} /> 
                           </div>
                           {feature.text}
                         </li>
@@ -552,7 +692,7 @@ const App: React.FC = () => {
                   <button 
                     onClick={handleBooking}
                     className={`w-full py-4 text-sm font-bold uppercase tracking-[0.2em] border transition-all duration-300 mt-8 rounded-xl
-                      ${ticket.color === 'gold' ? 'bg-orange-500 text-black border-orange-500 hover:bg-white hover:border-white' : 'border-white/20 text-white hover:bg-white hover:text-black'}
+                      ${ticket.color === 'gold' ? 'bg-[#f78e2c] text-black border-[#f78e2c] hover:bg-white hover:border-white' : 'border-white/20 text-white hover:bg-white hover:text-black'}
                     `}
                   >
                     {ticket.price}
@@ -565,12 +705,12 @@ const App: React.FC = () => {
       </section>
 
       {/* WHAT'S ON SECTION */}
-      <section id="whats-on" className="relative z-10 py-20 md:py-32 bg-[#1a1a1a] border-t border-white/5">
+      <section id="whats-on" className="relative z-10 py-20 md:py-32 bg-[#15222e] border-t border-white/5">
          <div className="max-w-[1600px] mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center mb-16">
-              <span className="text-orange-500 font-mono text-sm tracking-[0.3em] uppercase mb-4">Live & Loud</span>
+              <span className="text-[#f78e2c] font-mono text-sm tracking-[0.3em] uppercase mb-4">Live & Loud</span>
               <h2 className="text-5xl md:text-8xl font-heading font-bold uppercase text-center">
-                What's <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">On</span>
+                What's <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f78e2c] to-amber-500">On</span>
               </h2>
             </div>
             
@@ -583,16 +723,16 @@ const App: React.FC = () => {
       </section>
 
       {/* MERGED SECTION */}
-      <section id="eat-drink" className="relative z-10 py-24 md:py-32 bg-[#111] border-t border-white/10">
+      <section id="eat-drink" className="relative z-10 py-24 md:py-32 bg-[#0b1219] border-t border-white/10">
         <div className="max-w-[1600px] mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end mb-16 px-4">
              <div>
                <div className="flex items-center gap-4 mb-6">
-                  <span className="text-orange-500 font-mono text-sm tracking-[0.3em] uppercase">Taste Makers</span>
-                  <div className="h-px w-12 bg-orange-500/50" />
+                  <span className="text-[#f78e2c] font-mono text-sm tracking-[0.3em] uppercase">Taste Makers</span>
+                  <div className="h-px w-12 bg-[#f78e2c]/50" />
                </div>
                <h2 className="text-5xl md:text-7xl font-heading font-bold uppercase leading-none mb-6">
-                 More Than <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">A Pub</span>
+                 More Than <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f78e2c] to-amber-500">A Pub</span>
                </h2>
                <p className="text-lg text-gray-300 font-light leading-relaxed max-w-xl mb-8">
                  Fizzy Moon is an extension of your night out. A place where the drinks are crafted in-house, the food is fire-kissed, and the music never stops.
@@ -604,8 +744,8 @@ const App: React.FC = () => {
                     { icon: Music, label: "Live Music" },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 text-white/80 group">
-                      <div className="p-2 rounded-full bg-white/5 group-hover:bg-orange-500 transition-colors duration-300">
-                        <item.icon className="w-4 h-4 text-orange-500 group-hover:text-black transition-colors duration-300" />
+                      <div className="p-2 rounded-full bg-white/5 group-hover:bg-[#f78e2c] transition-colors duration-300">
+                        <item.icon className="w-4 h-4 text-[#f78e2c] group-hover:text-black transition-colors duration-300" />
                       </div>
                       <span className="font-bold uppercase text-xs tracking-widest">{item.label}</span>
                     </div>
@@ -616,7 +756,7 @@ const App: React.FC = () => {
              <div className="flex justify-start lg:justify-end pb-2">
                 <button 
                   onClick={handleBooking}
-                  className="group relative px-8 py-4 bg-white/5 border border-white/20 text-white font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-orange-500 hover:border-orange-500 hover:text-black overflow-hidden rounded-full"
+                  className="group relative px-8 py-4 bg-white/5 border border-white/20 text-white font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-[#f78e2c] hover:border-[#f78e2c] hover:text-black overflow-hidden rounded-full"
                   data-hover="true"
                 >
                    <span className="relative z-10 flex items-center gap-2">
@@ -635,11 +775,11 @@ const App: React.FC = () => {
       </section>
 
       {/* FAQ SECTION */}
-      <section id="faq" className="relative z-10 py-24 bg-[#0a0a0a] border-t border-white/10">
+      <section id="faq" className="relative z-10 py-24 bg-[#080d11] border-t border-white/10">
           <div className="max-w-4xl mx-auto px-6">
               <div className="text-center mb-16">
                   <h2 className="text-4xl md:text-6xl font-heading font-bold uppercase mb-4">
-                      Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">Questions</span>
+                      Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f78e2c] to-amber-500">Questions</span>
                   </h2>
                   <p className="text-gray-400">Everything you need to know before you go.</p>
               </div>
@@ -647,7 +787,7 @@ const App: React.FC = () => {
           </div>
       </section>
 
-      <footer id="contact" className="relative z-10 border-t border-white/10 py-12 md:py-16 bg-black/80 backdrop-blur-xl">
+      <footer id="contact" className="relative z-10 border-t border-white/10 py-12 md:py-16 bg-[#0b1219]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div>
              <div className="font-heading text-3xl md:text-4xl font-bold tracking-tighter mb-4 text-white">FIZZY MOON</div>
@@ -682,8 +822,9 @@ const App: React.FC = () => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-4xl bg-[#1a1a1a] border-t md:border border-white/10 overflow-hidden flex flex-col shadow-2xl shadow-orange-500/10 group/modal h-[90dvh] md:h-[85vh] rounded-t-3xl md:rounded-3xl"
+              className="relative w-full max-w-4xl bg-[#15222e] border-t md:border border-white/10 overflow-hidden flex flex-col shadow-2xl shadow-[#f78e2c]/10 group/modal h-[90dvh] md:h-[85vh] rounded-t-3xl md:rounded-3xl"
             >
+              {/* Close Button */}
               <button
                 onClick={() => setSelectedFeature(null)}
                 className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md"
@@ -691,150 +832,245 @@ const App: React.FC = () => {
                 <X className="w-6 h-6" />
               </button>
 
-              <div className="w-full h-[220px] md:h-[280px] relative shrink-0 group/image">
-                <AnimatePresence mode="wait">
-                  <motion.img 
-                    key={selectedFeature.id}
-                    src={selectedFeature.image} 
-                    alt={selectedFeature.name} 
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </AnimatePresence>
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/40 to-transparent" />
+              {/* Top Image Section - Shows only if no specific event selected */}
+              <AnimatePresence mode="popLayout">
+                {!selectedEvent && (
+                    <motion.div 
+                        key="main-header"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="w-full h-[220px] md:h-[280px] relative shrink-0 group/image"
+                    >
+                        <img 
+                          src={selectedFeature.image} 
+                          alt={selectedFeature.name} 
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#15222e] via-[#15222e]/40 to-transparent" />
 
-                <button
-                  onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md opacity-0 group-hover/image:opacity-100 duration-300 md:block hidden"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md opacity-0 group-hover/image:opacity-100 duration-300 md:block hidden"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
+                        {/* Navigation Buttons for Main Features */}
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full flex justify-between px-4 pointer-events-none">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }}
+                              className="p-3 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md pointer-events-auto opacity-0 group-hover/image:opacity-100 duration-300 hidden md:block"
+                            >
+                              <ChevronLeft className="w-6 h-6" />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }}
+                              className="p-3 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-md pointer-events-auto opacity-0 group-hover/image:opacity-100 duration-300 hidden md:block"
+                            >
+                              <ChevronRight className="w-6 h-6" />
+                            </button>
+                        </div>
+                        
+                        {/* Mobile Nav */}
+                        <div className="absolute bottom-4 right-4 flex gap-2 md:hidden z-20">
+                           <button onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }} className="p-2 rounded-full bg-black/50 border border-white/10 text-white"><ChevronLeft className="w-5 h-5" /></button>
+                           <button onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }} className="p-2 rounded-full bg-black/50 border border-white/10 text-white"><ChevronRight className="w-5 h-5" /></button>
+                        </div>
 
-                 <div className="absolute bottom-4 right-4 flex gap-2 md:hidden z-20">
-                   <button onClick={(e) => { e.stopPropagation(); navigateFeature('prev'); }} className="p-2 rounded-full bg-black/50 border border-white/10 text-white"><ChevronLeft className="w-5 h-5" /></button>
-                   <button onClick={(e) => { e.stopPropagation(); navigateFeature('next'); }} className="p-2 rounded-full bg-black/50 border border-white/10 text-white"><ChevronRight className="w-5 h-5" /></button>
-                 </div>
+                        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col justify-end items-start z-10">
+                           <div className="flex items-center gap-3 text-[#f78e2c] mb-2">
+                             <Calendar className="w-4 h-4" />
+                             <span className="font-mono text-xs md:text-sm tracking-widest uppercase">{selectedFeature.tag}</span>
+                           </div>
+                           <h3 className="text-3xl md:text-5xl font-heading font-black uppercase leading-none text-white mb-1 tracking-tighter shadow-black drop-shadow-lg">
+                              {selectedFeature.name}
+                           </h3>
+                           <p className="text-base md:text-xl text-amber-500 font-medium tracking-widest uppercase">
+                              {selectedFeature.category}
+                           </p>
+                        </div>
+                    </motion.div>
+                )}
+              </AnimatePresence>
 
-                <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col justify-end items-start z-10">
-                   <div className="flex items-center gap-3 text-orange-500 mb-2">
-                     <Calendar className="w-4 h-4" />
-                     <span className="font-mono text-xs md:text-sm tracking-widest uppercase">{selectedFeature.tag}</span>
-                   </div>
-                   <h3 className="text-3xl md:text-5xl font-heading font-black uppercase leading-none text-white mb-1 tracking-tighter shadow-black drop-shadow-lg">
-                      {selectedFeature.name}
-                   </h3>
-                   <p className="text-base md:text-xl text-amber-500 font-medium tracking-widest uppercase">
-                      {selectedFeature.category}
-                   </p>
-                </div>
-              </div>
-
+              {/* Main Scrollable Content Area */}
               <div 
                  ref={modalScrollRef}
                  onScroll={handleModalScroll} 
-                 className="flex-1 overflow-y-auto bg-[#1a1a1a] relative scroll-smooth"
+                 className="flex-1 overflow-y-auto bg-[#15222e] relative scroll-smooth"
                  style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}
               >
-                 <div className="max-w-4xl mx-auto p-5 md:p-8">
-                    <p className="text-gray-300 leading-relaxed text-sm md:text-base font-light mb-8 max-w-2xl">
-                       {selectedFeature.description}
-                    </p>
+                 {/* Detail View for Artist */}
+                 <AnimatePresence mode="wait">
+                     {selectedEvent ? (
+                        <motion.div 
+                            key="event-detail"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 50 }}
+                            className="h-full flex flex-col"
+                        >
+                            {/* Sticky Back Button Header */}
+                            <div className="sticky top-0 z-40 bg-[#15222e]/95 backdrop-blur-xl border-b border-white/10 p-4">
+                                <button 
+                                    onClick={() => setSelectedEvent(null)}
+                                    className="flex items-center gap-2 text-white/70 hover:text-[#f78e2c] transition-colors font-mono uppercase text-xs tracking-widest"
+                                >
+                                    <ArrowLeft className="w-4 h-4" /> Back to Calendar
+                                </button>
+                            </div>
 
-                    {selectedFeature.id === 'e1' ? (
-                       <>
-                         <div className="sticky top-0 z-30 py-2 mb-6 -mx-5 px-5 md:-mx-8 md:px-8 bg-[#1a1a1a]/95 backdrop-blur-sm border-b border-white/5 flex justify-start overflow-x-auto no-scrollbar">
-                             <div className="relative flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1 shadow-2xl">
-                                 {MUSIC_SCHEDULE.map((month, idx) => {
-                                     const isActive = activeMonth === idx;
-                                     return (
-                                         <button
-                                             key={idx}
-                                             onClick={() => scrollToMonth(idx)}
-                                             className={`relative px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-colors duration-300 z-10 shrink-0 ${isActive ? 'text-black' : 'text-gray-400 hover:text-white'}`}
-                                         >
-                                             {isActive && (
-                                                 <motion.div
-                                                     layoutId="activePill"
-                                                     className="absolute inset-0 bg-orange-500 rounded-full -z-10"
-                                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                                 />
-                                             )}
-                                             {month.month}
-                                         </button>
-                                     );
-                                 })}
-                             </div>
-                         </div>
+                            {/* Artist Hero Image */}
+                            <div className="relative w-full aspect-video md:aspect-[21/9] shrink-0 overflow-hidden">
+                                <img src={selectedEvent.image} alt={selectedEvent.act} className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#15222e] to-transparent" />
+                                <div className="absolute bottom-0 left-0 p-6 md:p-8">
+                                    <div className="inline-block px-3 py-1 bg-[#f78e2c] text-black font-bold text-[10px] tracking-widest uppercase mb-2 rounded">
+                                        {selectedEvent.genre}
+                                    </div>
+                                    <h2 className="text-4xl md:text-6xl font-heading font-bold uppercase text-white leading-none mb-1">
+                                        {selectedEvent.act}
+                                    </h2>
+                                    <p className="text-xl text-gray-300 font-medium">
+                                        {selectedEvent.date} @ {selectedEvent.time}
+                                    </p>
+                                </div>
+                            </div>
 
-                         <div className="space-y-8 pb-24">
-                          {MUSIC_SCHEDULE.map((month, idx) => (
-                             <div key={idx} id={`month-section-${idx}`} className="relative scroll-mt-32">
-                               <div className="flex items-center gap-4 mb-6">
-                                 <h5 className="text-4xl md:text-5xl font-heading font-black uppercase text-white/5 tracking-tighter">
-                                   {month.month}
-                                 </h5>
-                                 <div className="h-px flex-1 bg-gradient-to-r from-orange-500/30 to-transparent" />
-                               </div>
+                            {/* Artist Info */}
+                            <div className="p-6 md:p-8 max-w-3xl">
+                                <h4 className="text-[#f78e2c] font-mono text-sm uppercase tracking-widest mb-4">About The Artist</h4>
+                                <p className="text-gray-300 text-lg leading-relaxed font-light mb-8">
+                                    {selectedEvent.description || "Join us for an unforgettable night of live music, great drinks, and amazing atmosphere."}
+                                </p>
+                                
+                                <div className="grid grid-cols-2 gap-4 mb-8">
+                                    <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+                                        <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">Time</div>
+                                        <div className="text-white font-bold">{selectedEvent.time}</div>
+                                    </div>
+                                    <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+                                        <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">Entry</div>
+                                        <div className="text-white font-bold">Free Entry</div>
+                                    </div>
+                                </div>
 
-                               <div className="space-y-3">
-                                 {month.events.map((event, i) => (
-                                   <div key={i} onClick={handleBooking} className={`cursor-pointer relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-300 group/item overflow-hidden ${event.special ? 'bg-gradient-to-r from-orange-500/10 to-transparent border-orange-500/40' : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'}`}>
-                                      <div className="flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-black/40 border border-white/10 shrink-0 backdrop-blur-sm group-hover/item:border-orange-500/50 transition-colors">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">{event.date.split(' ')[0]}</span>
-                                        <span className="text-xl font-bold font-mono text-white">{event.date.split(' ')[1].replace(/(st|nd|rd|th)/, '')}</span>
-                                      </div>
-                                      <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-full md:rounded-lg overflow-hidden border border-white/10 relative shadow-lg">
-                                        <img 
-                                          src={event.image} 
-                                          alt={event.act} 
-                                          className="w-full h-full object-cover transform group-hover/item:scale-110 transition-transform duration-500"
-                                        />
-                                        <div className="absolute inset-0 bg-black/20 group-hover/item:bg-transparent transition-colors" />
-                                      </div>
-                                      <div className="flex-1 min-w-0">
-                                        <h4 className={`text-lg md:text-xl font-heading font-bold uppercase truncate pr-4 ${event.special ? 'text-orange-500' : 'text-white'}`}>
-                                          {event.act}
-                                        </h4>
-                                        {event.note ? (
-                                          <div className="flex items-center gap-2 mt-1">
-                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-orange-500 text-black">
-                                              {event.note}
-                                            </span>
-                                          </div>
-                                        ) : event.highlight ? (
-                                           <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 group-hover/item:text-orange-500 transition-colors">
-                                              Headliner
-                                            </span>
+                                <button 
+                                    onClick={handleBooking}
+                                    className="w-full py-5 rounded-xl bg-[#f78e2c] text-black font-bold font-heading uppercase tracking-widest hover:bg-white hover:scale-[1.01] transition-all shadow-lg shadow-orange-500/20"
+                                >
+                                    Book Your Table
+                                </button>
+                            </div>
+                        </motion.div>
+                     ) : (
+                        // CALENDAR LIST VIEW
+                        <motion.div 
+                            key="calendar-list"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="max-w-4xl mx-auto p-5 md:p-8"
+                        >
+                            <p className="text-gray-300 leading-relaxed text-sm md:text-base font-light mb-8 max-w-2xl">
+                               {selectedFeature.description}
+                            </p>
+
+                            {selectedFeature.id === 'e1' ? (
+                               <>
+                                 {/* Month Navigation */}
+                                 <div className="sticky top-0 z-30 py-2 mb-6 -mx-5 px-5 md:-mx-8 md:px-8 bg-[#15222e]/95 backdrop-blur-sm border-b border-white/5 flex justify-start overflow-x-auto no-scrollbar">
+                                     <div className="relative flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1 shadow-2xl">
+                                         {MUSIC_SCHEDULE.map((month, idx) => {
+                                             const isActive = activeMonth === idx;
+                                             return (
+                                                 <button
+                                                     key={idx}
+                                                     onClick={() => scrollToMonth(idx)}
+                                                     className={`relative px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest transition-colors duration-300 z-10 shrink-0 ${isActive ? 'text-black' : 'text-gray-400 hover:text-white'}`}
+                                                 >
+                                                     {isActive && (
+                                                         <motion.div
+                                                             layoutId="activePill"
+                                                             className="absolute inset-0 bg-[#f78e2c] rounded-full -z-10"
+                                                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                                         />
+                                                     )}
+                                                     {month.month}
+                                                 </button>
+                                             );
+                                         })}
+                                     </div>
+                                 </div>
+
+                                 {/* Calendar Events List */}
+                                 <div className="space-y-8 pb-24">
+                                  {MUSIC_SCHEDULE.map((month, idx) => (
+                                     <div key={idx} id={`month-section-${idx}`} className="relative scroll-mt-32">
+                                       <div className="flex items-center gap-4 mb-6">
+                                         <h5 className="text-4xl md:text-5xl font-heading font-black uppercase text-white/5 tracking-tighter">
+                                           {month.month}
+                                         </h5>
+                                         <div className="h-px flex-1 bg-gradient-to-r from-[#f78e2c]/30 to-transparent" />
+                                       </div>
+
+                                       <div className="grid gap-3">
+                                         {month.events.map((event, i) => (
+                                           <div 
+                                              key={i} 
+                                              onClick={() => setSelectedEvent(event)} // Open Detail View
+                                              className={`cursor-pointer relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-300 group/item overflow-hidden ${event.special ? 'bg-gradient-to-r from-[#f78e2c]/10 to-transparent border-[#f78e2c]/40' : 'bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10'}`}
+                                           >
+                                              {/* Date Box */}
+                                              <div className="flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-black/40 border border-white/10 shrink-0 backdrop-blur-sm group-hover/item:border-[#f78e2c]/50 transition-colors">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">{event.date.split(' ')[0]}</span>
+                                                <span className="text-xl font-bold font-mono text-white">{event.date.split(' ')[1].replace(/(st|nd|rd|th)/, '')}</span>
+                                              </div>
+                                              
+                                              {/* Thumbnail Image */}
+                                              <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-full md:rounded-lg overflow-hidden border border-white/10 relative shadow-lg">
+                                                <img 
+                                                  src={event.image} 
+                                                  alt={event.act} 
+                                                  className="w-full h-full object-cover transform group-hover/item:scale-110 transition-transform duration-500"
+                                                />
+                                                <div className="absolute inset-0 bg-black/20 group-hover/item:bg-transparent transition-colors" />
+                                              </div>
+                                              
+                                              {/* Info */}
+                                              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                     {event.special && <span className="text-[10px] bg-[#f78e2c] text-black px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Special</span>}
+                                                     {event.note && <span className="text-[10px] bg-white/20 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">{event.note}</span>}
+                                                </div>
+                                                <h4 className={`text-lg md:text-xl font-heading font-bold uppercase truncate pr-4 ${event.special ? 'text-[#f78e2c]' : 'text-white'}`}>
+                                                  {event.act}
+                                                </h4>
+                                                <div className="flex items-center gap-2 mt-0.5">
+                                                    <span className="text-xs text-gray-400 group-hover/item:text-[#f78e2c] transition-colors uppercase tracking-wider font-medium">
+                                                      {event.genre || 'Live Music'}
+                                                    </span>
+                                                </div>
+                                              </div>
+                                              
+                                              {/* Arrow */}
+                                              <div className="px-2 opacity-50 group-hover/item:opacity-100 transition-all -translate-x-2 group-hover/item:translate-x-0 duration-300 text-[#f78e2c]">
+                                                <div className="hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                                                    <span>View Info</span> <ChevronRight className="w-5 h-5" />
+                                                </div>
+                                                <ChevronRight className="w-6 h-6 md:hidden" />
+                                              </div>
                                            </div>
-                                        ) : null}
-                                      </div>
-                                      <div className="opacity-0 group-hover/item:opacity-100 transition-opacity -translate-x-4 group-hover/item:translate-x-0 duration-300 text-orange-500 hidden md:block">
-                                        <ChevronRight className="w-6 h-6" />
-                                      </div>
-                                   </div>
-                                 ))}
-                               </div>
-                             </div>
-                          ))}
-                         </div>
-                       </>
-                    ) : (
-                      <div className="pb-24">
-                        <button onClick={handleBooking} className="w-full py-6 rounded-2xl bg-orange-500 text-black font-bold uppercase tracking-widest hover:bg-white transition-colors">Book Experience Now</button>
-                      </div>
-                    )}
-                 </div>
+                                         ))}
+                                       </div>
+                                     </div>
+                                  ))}
+                                 </div>
+                               </>
+                            ) : (
+                              // Default View for other features (Food/Quiz)
+                              <div className="pb-24">
+                                <button onClick={handleBooking} className="w-full py-6 rounded-2xl bg-[#f78e2c] text-black font-bold uppercase tracking-widest hover:bg-white transition-colors">Book Experience Now</button>
+                              </div>
+                            )}
+                         </motion.div>
+                     )}
+                 </AnimatePresence>
               </div>
             </motion.div>
           </motion.div>

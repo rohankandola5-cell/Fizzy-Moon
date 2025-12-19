@@ -53,13 +53,13 @@ const StarField = () => {
 
 const FluidBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-black">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#0b1219]">
       
       <StarField />
 
       {/* Blob 1: Vibrant Orange (Fizzy) */}
       <motion.div
-        className="absolute top-[-10%] left-[-10%] w-[90vw] h-[90vw] bg-orange-600 rounded-full mix-blend-screen filter blur-[60px] opacity-15 will-change-transform"
+        className="absolute top-[-10%] left-[-10%] w-[90vw] h-[90vw] bg-[#f78e2c] rounded-full mix-blend-screen filter blur-[60px] opacity-15 will-change-transform"
         animate={{
           x: [0, 50, -25, 0],
           y: [0, -25, 25, 0],
@@ -106,7 +106,7 @@ const FluidBackground: React.FC = () => {
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
       
       {/* Heavy Vignette for "Dark Mode" feel */}
-      <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/90 pointer-events-none" />
+      <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#0b1219]/40 to-[#0b1219]/90 pointer-events-none" />
     </div>
   );
 };
